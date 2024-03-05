@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/react";
 export default function NavbarComponent() {
   return (
-    <Navbar className=" relative flex min-w-full max-w-2xl shadow-md">
+    <Navbar position="sticky" className="relative flex min-w-full  shadow-md">
       <NavbarContent justify="start">
         <NavbarItem>
           <Link href="/tours">Tours</Link>
