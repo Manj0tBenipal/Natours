@@ -16,3 +16,6 @@
   );
   background-clip: text;
 }
+.min-w-half {
+  min-width: 50%;
+}
