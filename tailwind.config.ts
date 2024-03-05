@@ -12,5 +12,8 @@ const config: Config = {
     extend: {},
   },
   plugins: [nextui()],
+  fontFamily: {
+    poppins: ["var(--font-poppins)", "sans-serif"],
+  },
 };
 export default config;
