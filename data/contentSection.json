@@ -1,0 +1,20 @@
+[
+  {
+    "heading": "Trending",
+    "text": "Explore what people like the most. Get top 5 trending tours. Our analytics will guide you to the best options that we offer. Follow the link to know more about out top 5 tours of all time",
+    "buttonOptions": {
+      "buttonText": "Top Choices",
+      "link": "/top-5/tours"
+    },
+    "image": "/trending.svg"
+  },
+  {
+    "heading": "Light, Fast, and Powerful",
+    "text": "Our platform is designed to provide you the best experience starting from exploring your options, billing, and keeping track of your tours. We use most up-to-date texh to provided you the best experiece you've ever had!",
+    "buttonOptions": {
+      "buttonText": "Get Insights",
+      "link": "/company-insights"
+    },
+    "image": "/fast.svg"
+  }
+]
