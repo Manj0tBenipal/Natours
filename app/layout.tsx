@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} `}>
+      <body className={`${poppins.variable} max-w-screen-2xl m-auto`}>
         <Providers>
           <Navbar />
           {children}
