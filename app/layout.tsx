@@ -3,7 +3,7 @@ import { Poppins } from "next/font/google";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import "./globals.css";
-
+import Image from "next/image";
 const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
@@ -23,9 +23,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} max-w-screen-2xl m-auto`}>
+      <body
+        className={`relative ${poppins.variable} max-w-screen-2xl m-auto after:absolute  after:content='' after:top-0 after:left-0 after:-z-10 after:h-full after:w-full after:blur-md after:bg-white after:opacity-70`}
+      >
         <Providers>
           <Navbar />
+          <Image
+            className="-z-20 "
+            priority
+            style={{ top: 0 }}
+            src="/bg-gradient2.avif"
+            fill
+            alt="bg-gradient"
+          />
           {children}
         </Providers>
       </body>
