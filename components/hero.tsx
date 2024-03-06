@@ -4,7 +4,10 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <div className="max-w-full grid grid-cols-2 h-dvh">
+    <div
+      className="max-w-full grid grid-cols-2 h-dvh"
+      style={{ maxHeight: 780 }}
+    >
       <div className="flex flex-col space-y-4	font-extrabold mt-32 ">
         <p className="text-4xl	font-extrabold">
           Tours that bring once in a
