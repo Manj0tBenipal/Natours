@@ -23,20 +23,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`relative ${poppins.variable} max-w-screen-2xl m-auto after:absolute  after:content='' after:top-0 after:left-0 after:-z-10 after:h-full after:w-full after:blur-md after:bg-white after:opacity-70`}
-      >
+      <body className={`relative ${poppins.variable} max-w-screen-2xl m-auto `}>
         <Providers>
           <Navbar />
-          <Image
-            className="-z-20 "
-            priority
-            style={{ top: 0 }}
-            src="/bg-gradient2.avif"
-            fill
-            alt="bg-gradient"
-          />
-          {children}
+
+          <main className="relative min-h-dvh w-full p-16 after:absolute  after:content='' after:top-0 after:left-0 after:-z-10 after:h-full after:w-full after:blur-md after:bg-white after:opacity-70">
+            <Image
+              className="-z-20 "
+              priority
+              style={{ top: 0 }}
+              src="/bg-gradient2.avif"
+              fill
+              alt="bg-gradient"
+            />
+            {children}
+          </main>
         </Providers>
       </body>
     </html>
