@@ -1,10 +1,6 @@
 import { authUsingCookie } from "@/utils/serverActions";
 import { createContext, useState, SetStateAction, useEffect } from "react";
-interface User {
-  name: string;
-  email: string;
-  photo: string;
-}
+
 interface ContextType {
   user: User;
   setUser: React.Dispatch<SetStateAction<User>>;
