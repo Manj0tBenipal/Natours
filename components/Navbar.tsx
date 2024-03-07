@@ -8,9 +8,11 @@ import {
   Button,
 } from "@nextui-org/react";
 import LoginForm from "./LoginForm";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "./providers/UserContextProvider";
 export default function NavbarComponent() {
   const [loginFormVisible, setLoginFormVisible] = useState<boolean>(false);
+  const { user, setUser } = useContext(UserContext);
   return (
     <>
       {loginFormVisible && <LoginForm loginFormVisible={setLoginFormVisible} />}
@@ -28,17 +30,22 @@ export default function NavbarComponent() {
           </NavbarItem>
         </NavbarContent>
         <NavbarContent justify="end" className="flex justify-end space-x-0">
-          {!loginFormVisible && (
-            <NavbarItem>
-              <Button
-                onClick={() => setLoginFormVisible(true)}
-                href="/login"
-                color="primary"
-                variant="bordered"
-              >
-                Login
-              </Button>
-            </NavbarItem>
+          {/* Check if the user is loggedIn */}
+          {user ? (
+            !loginFormVisible && (
+              <NavbarItem>
+                <Button
+                  onClick={() => setLoginFormVisible(true)}
+                  href="/login"
+                  color="primary"
+                  variant="bordered"
+                >
+                  Login
+                </Button>
+              </NavbarItem>
+            )
+          ) : (
+            <NavbarItem></NavbarItem>
           )}
           <NavbarItem>
             <Button as={Link} href="/signup" color="primary" variant="solid">
