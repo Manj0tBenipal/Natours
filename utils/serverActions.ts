@@ -41,22 +41,21 @@ export async function login(credentials: string): Promise<ServerActionRes> {
  * It acts as a middleware between client's request for authentication to the server and
  * server's request to the API to authenticate user
  * The co`okie is retrieved from the client's request and is sent to the API in request headers
- * @returns {Promse<ServerActionRes>}
+ * @returns {Promise<ServerActionRes>}
  */
 export async function authUsingCookie(): Promise<ServerActionRes> {
   try {
     const session = cookies().get("session");
+
     //if user does not have a cookie
     if (!session) throw new Error("User not logged in");
     const res = await fetch(`${process.env.API_URL}/users/auth-using-cookie`, {
       headers: {
-        Authorization: `Bearer ${session}`,
+        Authorization: `Bearer ${session.value}`,
       },
     });
-    console.log(res.status);
     if (res.status !== 200) throw new Error("User is not logged in");
     const { user } = (await res.json()).data;
-    console.log(user);
     if (!user) throw new Error("User not logged in");
     return { status: "success", data: { user }, error: null };
   } catch (err: any) {
