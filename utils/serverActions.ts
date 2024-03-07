@@ -31,3 +31,14 @@ export async function login(credentials: string): Promise<string> {
     return JSON.stringify({ error: "Something went wrong please try later" });
   }
 }
+
+export async function authUsingCookie(): Promise<string> {
+  try {
+    const res = await fetch(`${process.env.API_URL}/users/auth-using-cookie`);
+    if (res.status !== 200) throw new Error("User is not logged in");
+    const { user } = (await res.json()).data;
+    return JSON.stringify(user);
+  } catch (err: any) {
+    return JSON.stringify({ status: "fail", data: null, error: err.message });
+  }
+}
