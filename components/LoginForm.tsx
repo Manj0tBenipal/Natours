@@ -56,13 +56,12 @@ export default function LoginForm({
 
       //extract error and user data from response
       const { error, data } = loginData;
-      const { user } = data;
 
       // in case authentication process fails
       if (error) throw new Error(error);
 
-      if (user) {
-        const { name, email, photo } = user;
+      if (data.user) {
+        const { name, email, photo } = data.user;
         //in case of a non-error outcome check if user details are sent
         if (!name || !email) throw new Error("Failed to fetch user");
         //on successfull authentication set the userdata to the context provider
