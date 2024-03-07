@@ -55,7 +55,7 @@ export async function authUsingCookie(): Promise<ServerActionRes> {
       },
     });
     if (res.status !== 200) throw new Error("User is not logged in");
-    const { user } = (await res.json()).data;
+    const { user } = await res.json();
     if (!user) throw new Error("User not logged in");
     return { status: "success", data: { user }, error: null };
   } catch (err: any) {
