@@ -10,10 +10,11 @@ import {
 import LoginForm from "./LoginForm";
 import { useContext, useState } from "react";
 import { UserContext } from "./providers/UserContextProvider";
+import UserAvatar from "./ui/UserAvatar";
 export default function NavbarComponent() {
   const [loginFormVisible, setLoginFormVisible] = useState<boolean>(false);
   const { user, setUser } = useContext(UserContext);
-  console.log(Object.keys(user).length)
+  console.log(Object.keys(user).length);
   return (
     <>
       {loginFormVisible && <LoginForm loginFormVisible={setLoginFormVisible} />}
@@ -32,35 +33,35 @@ export default function NavbarComponent() {
         </NavbarContent>
         <NavbarContent justify="end" className="flex justify-end space-x-0">
           {/* Check if the user is loggedIn */}
-          {Object.keys(user).length===0 ? (
-              <>
-                {
-                  !loginFormVisible && (
-                      <NavbarItem>
-                        <Button
-                            onClick={() => setLoginFormVisible(true)}
-                            href="/login"
-                            color="primary"
-                            variant="bordered"
-                        >
-                          Login
-                        </Button>
-                      </NavbarItem>)
-                }
-                  <NavbarItem>
-                  <Button as={Link} href="/signup" color="primary" variant="solid">
-                  Signup
+          {Object.keys(user).length === 0 ? (
+            <>
+              {!loginFormVisible && (
+                <NavbarItem>
+                  <Button
+                    onClick={() => setLoginFormVisible(true)}
+                    color="primary"
+                    variant="bordered"
+                  >
+                    Login
                   </Button>
-                  </NavbarItem>
-
-              </>
-
+                </NavbarItem>
+              )}
+              <NavbarItem>
+                <Button
+                  as={Link}
+                  href="/signup"
+                  color="primary"
+                  variant="solid"
+                >
+                  Signup
+                </Button>
+              </NavbarItem>
+            </>
           ) : (
             <NavbarItem>
-
+              <UserAvatar />
             </NavbarItem>
           )}
-
         </NavbarContent>
       </Navbar>
     </>
