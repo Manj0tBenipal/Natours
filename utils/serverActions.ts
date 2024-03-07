@@ -62,3 +62,10 @@ export async function authUsingCookie(): Promise<ServerActionRes> {
     return { status: "fail", data: null, error: err.message };
   }
 }
+
+/**
+ *This function deletes the cookie that is used to authenticate user
+ */
+export async function logout() {
+  cookies().delete("session");
+}
