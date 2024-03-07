@@ -3,11 +3,11 @@ import { login } from "@/utils/serverActions";
 import isEmail from "validator/lib/isEmail";
 import { Button, Input } from "@nextui-org/react";
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from "react";
-import { FaCross, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
 import { MdCancel, MdEmail } from "react-icons/md";
 import { useContext } from "react";
 import { UserContext } from "./providers/UserContextProvider";
-interface User {
+interface userData {
   email: string;
   password: string;
 }
@@ -16,28 +16,32 @@ export default function LoginForm({
 }: {
   loginFormVisible: React.Dispatch<SetStateAction<boolean>>;
 }) {
-  const [user, setUser] = useState<User>({ email: "", password: "" } as User);
+  const { user, setUser } = useContext(UserContext);
+  const [userData, setUserData] = useState<userData>({
+    email: "",
+    password: "",
+  } as userData);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [validated, setValidated] = useState<boolean>(false);
-
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   /**
-   * This function sets the user object using the onChange event and assigns the
+   * This function sets the userData object using the onChange event and assigns the
    * values to name and password from the inout elements
    * @param e
    */
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUser((prev: User) => ({ ...prev, [name]: value }) as User);
+    setUserData((prev: userData) => ({ ...prev, [name]: value }) as userData);
   };
 
   //toggles the visiblity of password
   const toggleVisibility = () => setIsVisible((prev) => !prev);
-  const validateUser = (user: User) => {
+  const validateuserData = (userData: userData) => {
     setValidated(
       () =>
-        user.password.length >= 12 &&
-        user.password.length <= 20 &&
-        isEmail(user.email)
+        userData.password.length >= 12 &&
+        userData.password.length <= 20 &&
+        isEmail(userData.email)
     );
   };
   /*
@@ -46,16 +50,33 @@ export default function LoginForm({
    *
    */
   const handleLogin = async () => {
+    setButtonLoading(true);
     try {
-      const data = await login(JSON.stringify(user));
-      user.password = "";
-      user.email = "";
-    } catch (err) {}
+      const loginPromise = await login(JSON.stringify(userData));
+      const data = JSON.parse(loginPromise);
+
+      const { error, user } = data;
+
+      //server actionr returns an object {error:string} in case authentication process fails
+      if (error) throw new Error(error);
+      if (user) {
+        const { name, email } = user;
+        //in case of a non-error outcome check if user details are sent
+        if (!name || !email) throw new Error("Failed to fetch user");
+        //on successfull authentication set the userdata to the context provider
+        setUser({ name, email });
+        setButtonLoading(false);
+        loginFormVisible(false);
+      }
+    } catch (err: any) {
+      alert(err.message);
+      setButtonLoading(false);
+    }
   };
-  //validate user on every change in email or password
+  //validate userData on every change in email or password
   useEffect(() => {
-    validateUser(user);
-  }, [user]);
+    validateuserData(userData);
+  }, [userData]);
 
   return (
     <div className="sticky top-0 w-full h-svh z-50 bg-white flex items-center justify-center">
@@ -67,7 +88,7 @@ export default function LoginForm({
       <div className="flex flex-col p-4 gap-4 items-center justify-center">
         <Input
           onChange={(e) => handleInput(e)}
-          value={user.email}
+          value={userData.email}
           type="email"
           name="email"
           label="Email"
@@ -101,11 +122,13 @@ export default function LoginForm({
           className="max-w-xs"
         />
         <Button
-          //check if the data inside user object passes validation
+          //check if the data inside userData object passes validation
           isDisabled={!validated}
+          isLoading={buttonLoading}
           color="primary"
-          variant="solid"
+          variant="ghost"
           onClick={handleLogin}
+          spinner={<FaSpinner />}
         >
           Login
         </Button>
