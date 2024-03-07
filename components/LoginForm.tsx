@@ -52,19 +52,21 @@ export default function LoginForm({
   const handleLogin = async () => {
     setButtonLoading(true);
     try {
-      const loginPromise = await login(JSON.stringify(userData));
-      const data = JSON.parse(loginPromise);
+      const loginData = await login(JSON.stringify(userData));
 
-      const { error, user } = data;
+      //extract error and user data from response
+      const { error, data } = loginData;
+      const { user } = data;
 
-      //server actionr returns an object {error:string} in case authentication process fails
+      // in case authentication process fails
       if (error) throw new Error(error);
+
       if (user) {
-        const { name, email } = user;
+        const { name, email, photo } = user;
         //in case of a non-error outcome check if user details are sent
         if (!name || !email) throw new Error("Failed to fetch user");
         //on successfull authentication set the userdata to the context provider
-        setUser({ name, email });
+        setUser({ name, email, photo });
         setButtonLoading(false);
         loginFormVisible(false);
       }
