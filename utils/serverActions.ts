@@ -24,7 +24,7 @@ export async function login(credentials: string): Promise<ServerActionRes> {
     if (!data && !token) throw new Error("Something went wrong!");
 
     cookies().set({
-      name: "refreshToken",
+      name: "session",
       value: token,
       httpOnly: true,
       secure: process.env.APP_ENV === "production",
@@ -37,14 +37,26 @@ export async function login(credentials: string): Promise<ServerActionRes> {
 }
 
 /**
- *This function
+ *This function is used to authenticate the user using the cookie that contains JWT
+ * It acts as a middleware between client's request for authentication to the server and
+ * server's request to the API to authenticate user
+ * The co`okie is retrieved from the client's request and is sent to the API in request headers
  * @returns {Promse<ServerActionRes>}
  */
 export async function authUsingCookie(): Promise<ServerActionRes> {
   try {
-    const res = await fetch(`${process.env.API_URL}/users/auth-using-cookie`);
+    const session = cookies().get("session");
+    //if user does not have a cookie
+    if (!session) throw new Error("User not logged in");
+    const res = await fetch(`${process.env.API_URL}/users/auth-using-cookie`, {
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
+    });
+    console.log(res.status);
     if (res.status !== 200) throw new Error("User is not logged in");
     const { user } = (await res.json()).data;
+    console.log(user);
     if (!user) throw new Error("User not logged in");
     return { status: "success", data: { user }, error: null };
   } catch (err: any) {
