@@ -3,3 +3,8 @@ interface ServerActionRes {
   data: any | null;
   error: string | null;
 }
+interface User {
+  name: string;
+  email: string;
+  photo: string;
+}
