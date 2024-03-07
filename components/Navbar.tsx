@@ -31,27 +31,35 @@ export default function NavbarComponent() {
         </NavbarContent>
         <NavbarContent justify="end" className="flex justify-end space-x-0">
           {/* Check if the user is loggedIn */}
-          {user ? (
-            !loginFormVisible && (
-              <NavbarItem>
-                <Button
-                  onClick={() => setLoginFormVisible(true)}
-                  href="/login"
-                  color="primary"
-                  variant="bordered"
-                >
-                  Login
-                </Button>
-              </NavbarItem>
-            )
+          {!user ? (
+              <>
+                {
+                  !loginFormVisible && (
+                      <NavbarItem>
+                        <Button
+                            onClick={() => setLoginFormVisible(true)}
+                            href="/login"
+                            color="primary"
+                            variant="bordered"
+                        >
+                          Login
+                        </Button>
+                      </NavbarItem>)
+                }
+                  <NavbarItem>
+                  <Button as={Link} href="/signup" color="primary" variant="solid">
+                  Signup
+                  </Button>
+                  </NavbarItem>
+
+              </>
+
           ) : (
-            <NavbarItem></NavbarItem>
+            <NavbarItem>
+              
+            </NavbarItem>
           )}
-          <NavbarItem>
-            <Button as={Link} href="/signup" color="primary" variant="solid">
-              Signup
-            </Button>
-          </NavbarItem>
+
         </NavbarContent>
       </Navbar>
     </>
