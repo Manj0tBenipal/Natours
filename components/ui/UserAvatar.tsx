@@ -2,7 +2,11 @@
 import { useContext, useState } from "react";
 import { UserContext } from "@/components/providers/UserContextProvider";
 import { Listbox, ListboxItem, User } from "@nextui-org/react";
+import { logout } from "@/utils/serverActions";
+
+import { useRouter } from "next/navigation";
 export default function UserAvatar() {
+  const router = useRouter();
   const { user, setUser } = useContext(UserContext);
   const [listBoxVisible, setListBoxVisible] = useState<boolean>(false);
   const items = [
@@ -34,16 +38,26 @@ export default function UserAvatar() {
       ></User>
       {listBoxVisible && (
         <Listbox
-          className="absolute bottom-100 bg-white shadow-md rounded-2xl"
+          className="absolute bottom-100 bg-white shadow-md rounded-2xl p-1"
           items={items}
           aria-label="Dynamic Actions"
-          onAction={(key) => alert(key)}
+          onAction={async (key) => {
+            try {
+              if (key === "logout") {
+                await logout();
+                setUser(() => ({}) as User);
+                router.push("/");
+              }
+            } catch (err) {
+              alert("failed to logout");
+            }
+          }}
         >
           {(item) => (
             <ListboxItem
               key={item.key}
-              color={item.key === "delete" ? "danger" : "default"}
-              className={item.key === "delete" ? "text-danger" : ""}
+              color={item.key === "logout" ? "danger" : "default"}
+              className={item.key === "logout" ? "text-danger" : ""}
             >
               {item.label}
             </ListboxItem>
