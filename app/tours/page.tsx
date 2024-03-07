@@ -30,7 +30,7 @@ export default async function Tours() {
           href={`/tours/${tour._id}`}
           isBlurred={true}
           key={tour._id}
-          className="w-full py-3 px-5 rounded-2xl
+          className="w-full py-3 px-1 rounded-2xl
           "
           isFooterBlurred={true}
         >
@@ -44,7 +44,7 @@ export default async function Tours() {
             />
           </CardHeader>
           <CardBody className="flex flex-col items-center justify-center gap-3 my-2 p-4 rounded-xl bg-[var(--color-primary)] text-white">
-            <p className="text-3xl  font-bold text-center">{tour.name}</p>
+            <p className="text-2xl  font-bold text-center">{tour.name}</p>
             <div className="flex gap-x-2 items-center  justify-center w-fit  text-xl font-semibold">
               Difficulty: {tour.difficulty}
             </div>
@@ -64,7 +64,7 @@ export default async function Tours() {
       );
     });
     return (
-      <div className="grid grid-cols-1 justify-items-center gap-5 lg:grid-cols-3 sm:grid-cols-2 ">
+      <div className="grid grid-cols-1 justify-items-center gap-1  lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 ">
         {cards}
       </div>
     );
