@@ -13,6 +13,7 @@ import { UserContext } from "./providers/UserContextProvider";
 export default function NavbarComponent() {
   const [loginFormVisible, setLoginFormVisible] = useState<boolean>(false);
   const { user, setUser } = useContext(UserContext);
+  console.log(Object.keys(user).length)
   return (
     <>
       {loginFormVisible && <LoginForm loginFormVisible={setLoginFormVisible} />}
@@ -31,7 +32,7 @@ export default function NavbarComponent() {
         </NavbarContent>
         <NavbarContent justify="end" className="flex justify-end space-x-0">
           {/* Check if the user is loggedIn */}
-          {!user ? (
+          {Object.keys(user).length===0 ? (
               <>
                 {
                   !loginFormVisible && (
@@ -56,7 +57,7 @@ export default function NavbarComponent() {
 
           ) : (
             <NavbarItem>
-              
+
             </NavbarItem>
           )}
 
