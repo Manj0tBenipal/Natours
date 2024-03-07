@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
  * @param credentials email and password of user
  * @returns data
  */
-export async function login(credentials: string) {
+export async function login(credentials: string): Promise<string> {
   try {
     const res = await fetch(`${process.env.API_URL}/users/login`, {
       method: "POST",
@@ -15,11 +15,11 @@ export async function login(credentials: string) {
     });
     const statusCode = res.status;
     if (statusCode !== 200) {
-      return { error: "Invalid Credentials" };
+      return JSON.stringify({ error: "Invalid Credentials" });
     }
     const { data, token } = await res.json();
     if (!data && !token)
-      return { error: "Something went wrong please try later" };
+      return JSON.stringify({ error: "Something went wrong please try later" });
     cookies().set({
       name: "refreshToken",
       value: token,
@@ -28,6 +28,6 @@ export async function login(credentials: string) {
     });
     return JSON.stringify(data);
   } catch (err) {
-    return { error: "Something went wrong please try later" };
+    return JSON.stringify({ error: "Something went wrong please try later" });
   }
 }
