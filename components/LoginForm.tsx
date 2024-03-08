@@ -10,16 +10,20 @@ import { UserContext } from "./providers/UserContextProvider";
 interface userData {
   email: string;
   password: string;
+  passwordConfirm: "";
 }
 export default function LoginForm({
   loginFormVisible,
+  type,
 }: {
   loginFormVisible: React.Dispatch<SetStateAction<boolean>>;
+  type: "login" | "signup" | undefined;
 }) {
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const [userData, setUserData] = useState<userData>({
     email: "",
     password: "",
+    passwordConfirm: "",
   } as userData);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [validated, setValidated] = useState<boolean>(false);
@@ -74,6 +78,8 @@ export default function LoginForm({
       setButtonLoading(false);
     }
   };
+
+  const handleSignup = async () => {};
   //validate userData on every change in email or password
   useEffect(() => {
     validateuserData(userData);
@@ -122,16 +128,40 @@ export default function LoginForm({
           type={isVisible ? "text" : "password"}
           className="max-w-xs"
         />
+        {type === "signup" && (
+          <Input
+            label="Confirm Password"
+            name="passwordConfirm"
+            onChange={handleInput}
+            variant="bordered"
+            placeholder="Confirm Password"
+            endContent={
+              <button
+                className="focus:outline-none"
+                type="button"
+                onClick={toggleVisibility}
+              >
+                {isVisible ? (
+                  <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
+                ) : (
+                  <FaEye className="text-2xl text-default-400 pointer-events-none" />
+                )}
+              </button>
+            }
+            type={isVisible ? "text" : "password"}
+            className="max-w-xs"
+          />
+        )}
         <Button
           //check if the data inside userData object passes validation
           isDisabled={!validated}
           isLoading={buttonLoading}
           color="primary"
           variant="ghost"
-          onClick={handleLogin}
+          onClick={type === "login" ? handleLogin : handleSignup}
           spinner={<FaSpinner />}
         >
-          Login
+          {type === "login" ? "Login" : "Signup"}
         </Button>
       </div>
     </div>
