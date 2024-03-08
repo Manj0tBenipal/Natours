@@ -40,7 +40,7 @@ export async function login(credentials: string): Promise<ServerActionRes> {
  *This function is used to authenticate the user using the cookie that contains JWT
  * It acts as a middleware between client's request for authentication to the server and
  * server's request to the API to authenticate user
- * The co`okie is retrieved from the client's request and is sent to the API in request headers
+ * The cookie is retrieved from the client's request and is sent to the API in request headers
  * @returns {Promise<ServerActionRes>}
  */
 export async function authUsingCookie(): Promise<ServerActionRes> {
@@ -63,6 +63,43 @@ export async function authUsingCookie(): Promise<ServerActionRes> {
   }
 }
 
+/**
+ * This function signs up user using the API and creates a new session cookie using the token
+ * returned by the API
+ * @param userData
+ * @returns {Promise<ServerActionRes>}
+ */
+export async function signup(userData: string): Promise<ServerActionRes> {
+  try {
+    const { name, email, password } = JSON.parse(userData);
+
+    //Check if the server action recieved sufficient data;
+    if (!email || !password || !name) throw new Error("Insufficient data");
+
+    //make an api call to signup the user
+    const resPromise = await fetch(`${process.env.API_URL}/users/signup`, {
+      method: "POST",
+      body: userData,
+      headers: {
+        "Content-type": "application/JSON",
+      },
+    });
+    const res = await resPromise.json();
+    if (res.status === "fail") throw new Error(res.err);
+
+    //token contains the jwt which will be added to the cookie
+    const { token, data } = res;
+    cookies().set("session", token, {
+      expires: 24 * 60 * 60 * 3,
+      secure: process.env.APP_ENV === "production",
+      httpOnly: true,
+    });
+    //data contains the user object containing user's name, email and photo
+    return { status: "success", data, error: null };
+  } catch (err: any) {
+    return { error: err.message, data: null, status: "fail" };
+  }
+}
 /**
  *This function deletes the cookie that is used to authenticate user
  */
