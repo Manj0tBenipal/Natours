@@ -13,11 +13,13 @@ import { UserContext } from "./providers/UserContextProvider";
 import UserAvatar from "./ui/UserAvatar";
 export default function NavbarComponent() {
   const [loginFormVisible, setLoginFormVisible] = useState<boolean>(false);
-  const { user, setUser } = useContext(UserContext);
-  console.log(Object.keys(user).length);
+  const [formType, setFormType] = useState<"login" | "signup">();
+  const { user } = useContext(UserContext);
   return (
     <>
-      {loginFormVisible && <LoginForm loginFormVisible={setLoginFormVisible} />}
+      {loginFormVisible && (
+        <LoginForm type={formType} loginFormVisible={setLoginFormVisible} />
+      )}
 
       <Navbar className="flex min-w-full z-40 shadow-sm">
         <NavbarContent justify="start">
@@ -38,7 +40,10 @@ export default function NavbarComponent() {
               {!loginFormVisible && (
                 <NavbarItem>
                   <Button
-                    onClick={() => setLoginFormVisible(true)}
+                    onClick={() => {
+                      setFormType("login");
+                      setLoginFormVisible(true);
+                    }}
                     color="primary"
                     variant="bordered"
                   >
@@ -48,8 +53,10 @@ export default function NavbarComponent() {
               )}
               <NavbarItem>
                 <Button
-                  as={Link}
-                  href="/signup"
+                  onClick={() => {
+                    setFormType("signup");
+                    setLoginFormVisible(true);
+                  }}
                   color="primary"
                   variant="solid"
                 >
