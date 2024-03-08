@@ -89,9 +89,29 @@ export default function LoginForm({
   };
 
   const handleSignup = async () => {
+    setButtonLoading(true);
     try {
       const res = await signup(JSON.stringify(userData));
-    } catch (err: any) {}
+
+      //extract error and user data from response
+      const { error, data } = res;
+
+      // in case authentication process fails
+      if (error) throw new Error(error);
+
+      if (data.user) {
+        const { name, email, photo } = data.user;
+        //in case of a non-error outcome check if user details are sent
+        if (!name || !email) throw new Error("Failed to fetch user");
+        //on successfull authentication set the userdata to the context provider
+        setUser({ name, email, photo });
+        setButtonLoading(false);
+        loginFormVisible(false);
+      }
+    } catch (err: any) {
+      console.log(err);
+      setButtonLoading(false);
+    }
   };
   //validate userData on every change in email or password
   useEffect(() => {
