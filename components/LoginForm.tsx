@@ -41,12 +41,17 @@ export default function LoginForm({
   //toggles the visiblity of password
   const toggleVisibility = () => setIsVisible((prev) => !prev);
   const validateuserData = (userData: userData) => {
-    setValidated(
-      () =>
+    setValidated(() => {
+      let isValid =
         userData.password.length >= 12 &&
         userData.password.length <= 20 &&
-        isEmail(userData.email)
-    );
+        isEmail(userData.email);
+
+      if (type === "signup") {
+        isValid = userData.password === userData.passwordConfirm;
+      }
+      return isValid;
+    });
   };
   /*
    * Call the server action to login using the auth API
