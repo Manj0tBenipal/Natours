@@ -1,5 +1,5 @@
 "use client";
-import { login } from "@/utils/serverActions";
+import { login, signup } from "@/utils/serverActions";
 import isEmail from "validator/lib/isEmail";
 import { Button, Input } from "@nextui-org/react";
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from "react";
@@ -11,6 +11,7 @@ interface userData {
   email: string;
   password: string;
   passwordConfirm: "";
+  name: string;
 }
 export default function LoginForm({
   loginFormVisible,
@@ -21,6 +22,7 @@ export default function LoginForm({
 }) {
   const { setUser } = useContext(UserContext);
   const [userData, setUserData] = useState<userData>({
+    name: "",
     email: "",
     password: "",
     passwordConfirm: "",
@@ -48,7 +50,9 @@ export default function LoginForm({
         isEmail(userData.email);
 
       if (type === "signup") {
-        isValid = userData.password === userData.passwordConfirm;
+        isValid = isValid && userData.name ? true : false;
+
+        isValid = isValid && userData.password === userData.passwordConfirm;
       }
       return isValid;
     });
@@ -84,7 +88,11 @@ export default function LoginForm({
     }
   };
 
-  const handleSignup = async () => {};
+  const handleSignup = async () => {
+    try {
+      const res = await signup(JSON.stringify(userData));
+    } catch (err: any) {}
+  };
   //validate userData on every change in email or password
   useEffect(() => {
     validateuserData(userData);
@@ -98,6 +106,16 @@ export default function LoginForm({
         onClick={() => loginFormVisible(false)}
       />
       <div className="flex flex-col p-4 gap-4 items-center justify-center">
+        <Input
+          onChange={(e) => handleInput(e)}
+          value={userData.name}
+          type="text"
+          name="name"
+          label="Name"
+          variant="bordered"
+          placeholder="John Doe"
+          labelPlacement="inside"
+        />
         <Input
           onChange={(e) => handleInput(e)}
           value={userData.email}
