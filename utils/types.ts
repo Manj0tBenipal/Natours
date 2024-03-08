@@ -8,3 +8,12 @@ interface User {
   email: string;
   photo: string;
 }
+interface TourShort {
+  _id: string;
+  name: string;
+  ratingsAverage: string;
+  summary: string;
+  imageCover: string;
+  price: number;
+  difficulty: string;
+}
