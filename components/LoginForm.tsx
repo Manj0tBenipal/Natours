@@ -92,7 +92,6 @@ export default function LoginForm({
     setButtonLoading(true);
     try {
       const res = await signup(JSON.stringify(userData));
-
       //extract error and user data from response
       const { error, data } = res;
 
@@ -109,7 +108,7 @@ export default function LoginForm({
         loginFormVisible(false);
       }
     } catch (err: any) {
-      console.log(err);
+      alert(err.message);
       setButtonLoading(false);
     }
   };
@@ -126,16 +125,18 @@ export default function LoginForm({
         onClick={() => loginFormVisible(false)}
       />
       <div className="flex flex-col p-4 gap-4 items-center justify-center">
-        <Input
-          onChange={(e) => handleInput(e)}
-          value={userData.name}
-          type="text"
-          name="name"
-          label="Name"
-          variant="bordered"
-          placeholder="John Doe"
-          labelPlacement="inside"
-        />
+        {type === "signup" && (
+          <Input
+            onChange={(e) => handleInput(e)}
+            value={userData.name}
+            type="text"
+            name="name"
+            label="Name"
+            variant="bordered"
+            placeholder="John Doe"
+            labelPlacement="inside"
+          />
+        )}
         <Input
           onChange={(e) => handleInput(e)}
           value={userData.email}
