@@ -89,10 +89,11 @@ export async function signup(userData: string): Promise<ServerActionRes> {
 
     //token contains the jwt which will be added to the cookie
     const { token, data } = res;
-    cookies().set("session", token, {
-      expires: 24 * 60 * 60 * 3,
-      secure: process.env.APP_ENV === "production",
+    cookies().set({
+      name: "session",
+      value: token,
       httpOnly: true,
+      secure: process.env.APP_ENV === "production",
     });
     //data contains the user object containing user's name, email and photo
     return { status: "success", data, error: null };
