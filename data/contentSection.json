@@ -4,7 +4,7 @@
     "text": "Explore what people like the most. Get top 5 trending tours. Our analytics will guide you to the best options that we offer. Follow the link to know more about out top 5 tours of all time",
     "buttonOptions": {
       "buttonText": "Top Choices",
-      "link": "/top-5/tours"
+      "link": "/top-5"
     },
     "image": "/trending.svg"
   },
