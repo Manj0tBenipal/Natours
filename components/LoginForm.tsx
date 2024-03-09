@@ -203,7 +203,7 @@ export default function LoginForm({
           color="primary"
           variant="ghost"
           onClick={type === "login" ? handleLogin : handleSignup}
-          spinner={<FaSpinner />}
+          spinner={<FaSpinner className="animate-spin" />}
         >
           {type === "login" ? "Login" : "Signup"}
         </Button>
