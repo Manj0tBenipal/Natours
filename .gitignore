@@ -43,3 +43,4 @@ next-env.d.ts
 .idea/natours.iml
 .idea/vcs.xml
 .idea/inspectionProfiles/Project_Default.xml
+.env.development
