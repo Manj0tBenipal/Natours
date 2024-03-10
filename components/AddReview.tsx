@@ -1,16 +1,35 @@
 "use client";
 
 import { Button, Input } from "@nextui-org/react";
-import { useContext, useEffect, useState } from "react";
-import { FaStar } from "react-icons/fa";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { FaSpinner, FaStar } from "react-icons/fa";
 import { UserContext } from "./providers/UserContextProvider";
+import { postReview } from "@/utils/serverActions";
+import { useRouter } from "next/navigation";
 
-export default function AddReview() {
+export default function AddReview({
+  tourId,
+  reloadReviews,
+}: {
+  tourId: string;
+  reloadReviews: Dispatch<SetStateAction<boolean>>;
+}) {
+  //logged in user
+  const { user } = useContext(UserContext);
+  const router = useRouter();
   const wordLimit = 300;
-  const [rating, setRating] = useState(0);
+
+  //stars given to the tour
+  const [rating, setRating] = useState(1);
   const [reviewText, setReviewText] = useState("");
   const [wordsRemaining, setWordsRemaining] = useState(wordLimit);
-  const { user } = useContext(UserContext);
+  const [isPosting, setIsPosting] = useState<boolean>(false);
   const ratingButtons: JSX.Element[] = [];
   for (let i = 0; i < 5; i++) {
     ratingButtons.push(
@@ -24,6 +43,32 @@ export default function AddReview() {
   useEffect(() => {
     setWordsRemaining(reviewText ? wordLimit - reviewText.length : 300);
   }, [reviewText]);
+
+  const handlePostReview = async () => {
+    try {
+      const review: Review = { tourId } as Review;
+      if (reviewText?.length > 0) review.text = reviewText;
+      review.rating = rating;
+      setIsPosting(true);
+      const res = await postReview(JSON.stringify(review));
+      if (res.status == "fail") throw new Error(res.error || "");
+
+      setIsPosting(false);
+      resetForm();
+
+      //trigger refresh of the server rendered components
+      router.refresh();
+
+      //trigger refresh  of reviews rendered on client side
+      reloadReviews((prev) => !prev);
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
+  const resetForm = () => {
+    setRating(1);
+    setReviewText("");
+  };
   return (
     <div className="flex justify-between items-start flex-col gap-y-3">
       {Object.keys(user).length === 0 && (
@@ -47,6 +92,9 @@ export default function AddReview() {
         {ratingButtons.map((button) => button)}
       </div>
       <Button
+        isLoading={isPosting}
+        onPress={handlePostReview}
+        spinner={<FaSpinner className="animate-spin" />}
         isDisabled={wordsRemaining < 0 || Object.keys(user).length === 0}
         color="primary"
       >
