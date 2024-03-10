@@ -1,4 +1,4 @@
-import { Card, CardBody, CardFooter } from "@nextui-org/react";
+import { Avatar, Card, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import { FaStar } from "react-icons/fa";
 
 export default function ReviewCard({ review }: { review: Review }) {
@@ -14,7 +14,17 @@ export default function ReviewCard({ review }: { review: Review }) {
   }
   return (
     <Card>
-      <CardBody>
+      <CardBody className="flex gap-y-2 justify-center items-start">
+        <div className="flex items-center gap-x-2">
+          <Avatar
+            src={`/users/${review.user.photo} `}
+            name={review.user.name}
+          />
+          <p className="text-[var(--color-primary-light)] font-bold">
+            {review.user.name}
+          </p>
+        </div>
+        <Divider orientation="horizontal" />
         <p>{review.text}</p>
       </CardBody>
       <CardFooter>
