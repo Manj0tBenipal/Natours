@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 /**
  *
@@ -106,4 +107,43 @@ export async function signup(userData: string): Promise<ServerActionRes> {
  */
 export async function logout() {
   cookies().delete("session");
+}
+
+/**
+ * This function is used to post a review to the database
+ * @param data
+ * @returns {ServerActionRes}
+ */
+export async function postReview(data: string): Promise<ServerActionRes> {
+  try {
+    //destructuring ensures that only required data in passed to the API
+    const review: Review = JSON.parse(data);
+    const isLoggedIn = cookies().has("session");
+
+    //Check if the user is logged in and has a valid JWT cookie
+    if (!isLoggedIn) throw new Error("User not logged in!");
+    const token = cookies().get("session")?.value;
+    if (!token) throw new Error("Invalid session cookie. Please login again");
+
+    //send a post reuqest to post a new review
+    const promise = await fetch(
+      `${process.env.API_URL}/tours/${review.tourId}/reviews`,
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/JSON",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(review),
+      }
+    );
+
+    const res = await promise.json();
+    if (res.status === "fail") throw new Error(res.err);
+    revalidatePath(`/tours/${review.tourId}`);
+    revalidatePath(`/api/reviews/${review.tourId}`);
+    return { status: "success", data: null, error: null };
+  } catch (err: any) {
+    return { status: "fail", data: null, error: err.message };
+  }
 }
