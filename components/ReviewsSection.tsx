@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Pagination, Button, Skeleton } from "@nextui-org/react";
+import { Pagination, Button, Skeleton, Divider } from "@nextui-org/react";
 import ReviewCard from "./ui/ReviewCard";
 import SkeletonComponent from "./ui/Skeleton";
+import AddReview from "./AddReview";
 
 export default function ReviewsSection({ tourId }: { tourId: string }) {
   const [fetching, setFetching] = useState<boolean>(true);
@@ -11,7 +12,7 @@ export default function ReviewsSection({ tourId }: { tourId: string }) {
   const [currentPage, setCurrentPage] = useState(1);
   const skeletons: JSX.Element[] = [];
   for (let i = 0; i < 2; i++) {
-    skeletons.push(<SkeletonComponent />);
+    skeletons.push(<SkeletonComponent key={i} />);
   }
   useEffect(() => {
     async function fetchReviews() {
@@ -36,8 +37,10 @@ export default function ReviewsSection({ tourId }: { tourId: string }) {
     fetchReviews();
   }, [currentPage]);
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="flex flex-col gap-y-4  bg-slate-200 rounded-2xl p-4">
       <h1 className="text-3xl text-gradient font-bold">Reviews</h1>
+      <AddReview />
+      <Divider orientation="horizontal" />
       {fetching ? (
         skeletons.map((s) => skeletons)
       ) : (
