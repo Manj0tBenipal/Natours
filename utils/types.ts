@@ -50,7 +50,7 @@ interface Location {
 }
 
 interface Review {
-  _id: string;
+  _id?: string;
   text?: string;
   tourId: string;
   user: User;
