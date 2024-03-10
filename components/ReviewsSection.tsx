@@ -77,13 +77,17 @@ export default function ReviewsSection({ tourId }: { tourId: string }) {
                 Previous
               </Button>
               <Button
+                isDisabled={currentPage === totalPages}
                 size="sm"
                 variant="flat"
                 color="primary"
                 onPress={() =>
                   setCurrentPage((prev) => {
-                    setFetching(true);
-                    return prev < totalPages ? prev + 1 : prev;
+                    if (prev < totalPages) {
+                      setFetching(true);
+                      return prev < totalPages ? prev + 1 : prev;
+                    }
+                    return prev;
                   })
                 }
               >
