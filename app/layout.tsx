@@ -27,7 +27,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
 
-          <main className="relative min-h-dvh w-full p-16 after:absolute  after:content='' after:top-0 after:left-0 after:-z-10 after:h-full after:w-full after:blur-md after:bg-white after:opacity-70">
+          <main className="relative min-h-dvh w-full lg:p-16 md:p-10 p-4 after:absolute  after:content='' after:top-0 after:left-0 after:-z-10 after:h-full after:w-full after:blur-md after:bg-white after:opacity-70">
             <Image
               className="-z-20 "
               priority
