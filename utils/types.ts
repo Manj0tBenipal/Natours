@@ -53,7 +53,7 @@ interface Review {
   _id: string;
   text?: string;
   tourId: string;
-  userId: string;
+  user: User;
   rating: number;
   createdAt: Date;
 }
