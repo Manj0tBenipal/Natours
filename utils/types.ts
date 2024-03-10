@@ -39,6 +39,7 @@ interface TourDetailed {
   startDates: Date[];
   locations: Location[];
   guides: User[];
+  reviews: Review[];
 }
 interface Location {
   type: string;
@@ -46,4 +47,13 @@ interface Location {
   description: string;
   day: number;
   _id: string;
+}
+
+interface Review {
+  _id: string;
+  text?: string;
+  tourId: string;
+  userId: string;
+  rating: number;
+  createdAt: Date;
 }
