@@ -47,14 +47,10 @@ export async function login(credentials: string): Promise<ServerActionRes> {
  */
 export async function authUsingCookie(): Promise<ServerActionRes> {
   try {
-    const session = cookies().get("session");
-
-    //if user does not have a cookie
-    if (!session) throw new Error("User not logged in");
+    const headers = new Headers({ "Content-type": "application/JSON" });
+    addSessionCookieToHeader(cookies(), headers);
     const res = await fetch(`${process.env.API_URL}/users/auth-using-cookie`, {
-      headers: {
-        Authorization: `Bearer ${session.value}`,
-      },
+      headers: headers,
     });
     if (res.status !== 200) throw new Error("User is not logged in");
     const { user } = await res.json();
@@ -120,22 +116,14 @@ export async function postReview(data: string): Promise<ServerActionRes> {
   try {
     //destructuring ensures that only required data in passed to the API
     const review: Review = JSON.parse(data);
-    const isLoggedIn = cookies().has("session");
-
-    //Check if the user is logged in and has a valid JWT cookie
-    if (!isLoggedIn) throw new Error("User not logged in!");
-    const token = cookies().get("session")?.value;
-    if (!token) throw new Error("Invalid session cookie. Please login again");
-
+    const headers = new Headers({ "Content-type": "application/JSON" });
+    addSessionCookieToHeader(cookies(), headers);
     //send a post reuqest to post a new review
     const promise = await fetch(
       `${process.env.API_URL}/tours/${review.tourId}/reviews`,
       {
         method: "POST",
-        headers: {
-          "Content-type": "application/JSON",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: headers,
         body: JSON.stringify(review),
       }
     );
