@@ -63,6 +63,7 @@ export default function AddReview({
       reloadReviews((prev) => !prev);
     } catch (err: any) {
       alert(err.message);
+      setIsPosting(false);
     }
   };
   const resetForm = () => {
