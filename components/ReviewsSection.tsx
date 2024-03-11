@@ -17,7 +17,7 @@ export default function ReviewsSection({ tourId }: { tourId: string }) {
   //a user adds a new review
   const [reloadReviews, setRelaodReviews] = useState<boolean>(false);
   const skeletons: JSX.Element[] = [];
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 4; i++) {
     skeletons.push(<SkeletonComponent key={i} />);
   }
   async function fetchReviews() {
@@ -49,7 +49,7 @@ export default function ReviewsSection({ tourId }: { tourId: string }) {
       <AddReview tourId={tourId} reloadReviews={setRelaodReviews} />
       <Divider orientation="horizontal" />
       {fetching ? (
-        skeletons.map((s) => skeletons)
+        skeletons.map((s) => s)
       ) : (
         <>
           <div className="flex flex-col gap-y-2">
