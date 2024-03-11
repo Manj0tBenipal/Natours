@@ -1,7 +1,15 @@
+"use client";
 import { Avatar, Card, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import { FaStar } from "react-icons/fa";
+import { FaTrashCan } from "react-icons/fa6";
 
-export default function ReviewCard({ review }: { review: Review }) {
+export default function ReviewCard({
+  review,
+  currentUser,
+}: {
+  review: Review;
+  currentUser: string;
+}) {
   const stars: JSX.Element[] = [] as JSX.Element[];
   for (let i = 1; i <= 5; i++) {
     stars.push(
@@ -15,6 +23,11 @@ export default function ReviewCard({ review }: { review: Review }) {
   return (
     <Card>
       <CardBody className="flex gap-y-2 justify-center items-start">
+        {currentUser === review.user._id && (
+          <div className="absolute right-4 top-4">
+            <FaTrashCan className="cursor-pointer z-50" />
+          </div>
+        )}
         <div className="flex items-center gap-x-2">
           <Avatar
             src={`/users/${review.user.photo} `}

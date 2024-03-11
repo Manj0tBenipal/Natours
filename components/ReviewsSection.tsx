@@ -1,11 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Pagination, Button, Skeleton, Divider } from "@nextui-org/react";
+import { useContext, useEffect, useState } from "react";
+import { Pagination, Button, Divider } from "@nextui-org/react";
 import ReviewCard from "./ui/ReviewCard";
 import SkeletonComponent from "./ui/Skeleton";
 import AddReview from "./AddReview";
+import { UserContext } from "./providers/UserContextProvider";
 
 export default function ReviewsSection({ tourId }: { tourId: string }) {
+  const { user } = useContext(UserContext);
   const [fetching, setFetching] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState(0);
   const [reviews, setReviews] = useState<Review[]>([] as Review[]);
@@ -53,7 +55,11 @@ export default function ReviewsSection({ tourId }: { tourId: string }) {
           <div className="flex flex-col gap-y-2">
             {reviews?.length > 0
               ? reviews.map((review) => (
-                  <ReviewCard key={review._id} review={review} />
+                  <ReviewCard
+                    key={review._id}
+                    review={review}
+                    currentUser={user._id}
+                  />
                 ))
               : "No reviews yet"}
           </div>
