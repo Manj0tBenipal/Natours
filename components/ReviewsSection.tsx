@@ -40,13 +40,20 @@ export default function ReviewsSection({ tourId }: { tourId: string }) {
       setFetching(false);
     }
   }
+  function changeToLastPage() {
+    setCurrentPage(totalPages);
+  }
   useEffect(() => {
     fetchReviews();
   }, [currentPage, reloadReviews]);
   return (
     <div className="flex flex-col gap-y-4  bg-slate-200 rounded-2xl p-4">
       <h1 className="text-3xl text-gradient font-bold">Reviews</h1>
-      <AddReview tourId={tourId} reloadReviews={setRelaodReviews} />
+      <AddReview
+        tourId={tourId}
+        reloadReviews={setRelaodReviews}
+        changeToLastPage={changeToLastPage}
+      />
       <Divider orientation="horizontal" />
       {fetching ? (
         skeletons.map((s) => s)
@@ -59,6 +66,7 @@ export default function ReviewsSection({ tourId }: { tourId: string }) {
                     key={review._id}
                     review={review}
                     currentUser={user._id}
+                    reloadReviews={setRelaodReviews}
                   />
                 ))
               : "No reviews yet"}

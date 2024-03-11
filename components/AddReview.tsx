@@ -16,9 +16,11 @@ import { useRouter } from "next/navigation";
 export default function AddReview({
   tourId,
   reloadReviews,
+  changeToLastPage,
 }: {
   tourId: string;
   reloadReviews: Dispatch<SetStateAction<boolean>>;
+  changeToLastPage: Function;
 }) {
   //logged in user
   const { user } = useContext(UserContext);
@@ -61,6 +63,7 @@ export default function AddReview({
 
       //trigger refresh  of reviews rendered on client side
       reloadReviews((prev) => !prev);
+      changeToLastPage();
     } catch (err: any) {
       alert(err.message);
       setIsPosting(false);
