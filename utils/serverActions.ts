@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { addSessionCookieToHeader } from "./functions";
 /**
  *
  * @param credentials email and password of user
@@ -147,5 +148,24 @@ export async function postReview(data: string): Promise<ServerActionRes> {
     return { status: "success", data: null, error: null };
   } catch (err: any) {
     return { status: "fail", data: null, error: err.message };
+  }
+}
+
+export async function deleteReview(reviewId: string): Promise<ServerActionRes> {
+  try {
+    const headers = new Headers();
+    addSessionCookieToHeader(cookies(), headers);
+    const promise = await fetch(`${process.env.API_URL}/reviews/${reviewId}`, {
+      method: "DELETE",
+      headers: headers,
+    });
+    const res = await promise.json();
+
+    if (res.status === "fail" || res.status === "success")
+      throw new Error(res.err);
+    return { status: "success", data: res.data, error: null };
+  } catch (err: any) {
+    console.log(err.message);
+    return { error: err.message, data: null, status: "fail" };
   }
 }
