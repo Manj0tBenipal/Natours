@@ -11,17 +11,19 @@ export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User>({} as User);
   useEffect(() => {
     async function fetchUser() {
-      const { status, error, data } = await authUsingCookie();
-      if (status === "fail" || error) return;
-      const { name, email, photo } = data?.user;
-      if (!user) return;
-      setUser(() => ({
-        name,
-        email,
-        photo,
-      }));
+      try {
+        const { status, error, data } = await authUsingCookie();
+        if (status === "fail" || error) return;
+        const { user } = data;
+        if (!user) return;
+        setUser(() => ({ ...user }));
+        if (Object.keys(user).length === 0) {
+          fetchUser();
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
-
     if (Object.keys(user).length === 0) {
       fetchUser();
     }

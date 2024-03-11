@@ -4,6 +4,13 @@ interface ServerActionRes {
   error: string | null;
 }
 interface User {
+  _id: string;
+  name: string;
+  email: string;
+  photo: string;
+  role: string;
+}
+interface NewUser {
   name: string;
   email: string;
   photo: string;

@@ -74,11 +74,10 @@ export default function LoginForm({
       if (error) throw new Error(error);
 
       if (data.user) {
-        const { name, email, photo } = data.user;
-        //in case of a non-error outcome check if user details are sent
-        if (!name || !email) throw new Error("Failed to fetch user");
+        if (Object.keys(data.user).length === 0)
+          throw new Error("Failed to Fetch user");
         //on successfull authentication set the userdata to the context provider
-        setUser({ name, email, photo });
+        setUser({ ...data.user });
         setButtonLoading(false);
         loginFormVisible(false);
       }
@@ -99,11 +98,10 @@ export default function LoginForm({
       if (error) throw new Error(error);
 
       if (data.user) {
-        const { name, email, photo } = data.user;
-        //in case of a non-error outcome check if user details are sent
-        if (!name || !email) throw new Error("Failed to fetch user");
+        if (Object.keys(data.user).length === 0)
+          throw new Error("Failed to Fetch user");
         //on successfull authentication set the userdata to the context provider
-        setUser({ name, email, photo });
+        setUser({ ...data.user });
         setButtonLoading(false);
         loginFormVisible(false);
       }
