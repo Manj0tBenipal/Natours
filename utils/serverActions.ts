@@ -86,7 +86,8 @@ export async function signup(userData: string): Promise<ServerActionRes> {
       },
     });
     const res = await resPromise.json();
-    if (res.status === "fail") throw new Error(res.err);
+    if (res.status === "fail" || res.status === "error")
+      throw new Error(res.err);
 
     //token contains the jwt which will be added to the cookie
     const { token, data } = res;
@@ -139,7 +140,8 @@ export async function postReview(data: string): Promise<ServerActionRes> {
     );
 
     const res = await promise.json();
-    if (res.status === "fail") throw new Error(res.err);
+    if (res.status === "fail" || res.status === "error")
+      throw new Error(res.err);
     revalidatePath(`/tours/${review.tourId}`);
     revalidatePath(`/api/reviews/${review.tourId}`);
     return { status: "success", data: null, error: null };
