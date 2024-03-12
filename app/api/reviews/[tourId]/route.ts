@@ -12,7 +12,7 @@ export async function GET(
     const url = new URL(req.url);
     const page = `${url.searchParams.has("page") ? "&page=" + url.searchParams.get("page") : ""}`;
     const promise = await fetch(
-      `${process.env.API_URL}/tours/${params.tourId}/reviews?limit=5${page}`
+      `${process.env.API_URL}/tours/${params.tourId}/reviews?limit=4${page}`
     );
     const res = await promise.json();
     return NextResponse.json({ ...res });
