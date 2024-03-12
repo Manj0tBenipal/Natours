@@ -1,8 +1,9 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Map, { Marker, MapRef } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { FaLocationPin } from "react-icons/fa6";
+import mapboxgl from "mapbox-gl";
 
 interface Marker {
   location: Location;
@@ -28,7 +29,6 @@ export default function Mapbox({ tour }: { tour: TourDetailed }) {
       });
     }
   };
-
   return (
     <div className="relative h-[50vh] rounded-2xl overflow-hidden">
       <Map
@@ -42,8 +42,16 @@ export default function Mapbox({ tour }: { tour: TourDetailed }) {
           zoom: 10,
         }}
         maxZoom={20}
-        minZoom={3}
+        minZoom={1}
       >
+        <Marker
+          longitude={tour.startLocation.coordinates[0]}
+          latitude={tour.startLocation.coordinates[1]}
+        >
+          <button type="button" className="cursor-pointer">
+            {<FaLocationPin size={30} color="var(--color-primary)" />}
+          </button>
+        </Marker>
         {tour.locations.map((location: Location, index) => {
           return (
             <Marker
