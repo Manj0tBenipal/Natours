@@ -29,9 +29,11 @@ export default function NavbarComponent() {
           <NavbarItem>
             <Link href="/users">Community</Link>
           </NavbarItem>
-          <NavbarItem>
-            <Link href="/about">About us</Link>
-          </NavbarItem>
+          {user?.role === "admin" && (
+            <NavbarItem>
+              <Link href="/dashboard">Dashboard</Link>
+            </NavbarItem>
+          )}
         </NavbarContent>
         <NavbarContent justify="end" className="flex justify-end space-x-0">
           {/* Check if the user is loggedIn */}
