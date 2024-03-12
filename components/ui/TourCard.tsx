@@ -10,9 +10,7 @@ export default function TourCard({ data }: { data: TourShort }) {
       href={`/tours/${data._id}`}
       isBlurred={true}
       key={data._id}
-      className="w-full py-3 px-1 rounded-2xl
-          "
-      isFooterBlurred={true}
+      className="w-full py-3 px-1 rounded-2xl shadow-none"
     >
       <CardHeader className="relative  shadow-sm rounded-2xl overflow-hidden w-full aspect-video ">
         <Image
