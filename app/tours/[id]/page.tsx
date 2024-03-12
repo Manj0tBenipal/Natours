@@ -65,8 +65,8 @@ export default async function Tour({ params }: { params: { id: string } }) {
                 ))}
             </div>
           </div>
-          <ReviewsSection tourId={tour._id} />
           <Mapbox tour={tour} />
+          <ReviewsSection tourId={tour._id} />
         </div>
       </>
     );
