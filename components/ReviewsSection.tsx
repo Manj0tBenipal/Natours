@@ -54,7 +54,7 @@ export default function ReviewsSection({ tourId }: { tourId: string }) {
         reloadReviews={setRelaodReviews}
         changeToLastPage={changeToLastPage}
       />
-      <Divider orientation="horizontal" />
+  
       {fetching ? (
         skeletons.map((s) => s)
       ) : (

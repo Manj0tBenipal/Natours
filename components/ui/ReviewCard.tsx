@@ -48,7 +48,6 @@ export default function ReviewCard({
             {review.user.name}
           </p>
         </div>
-        <Divider orientation="horizontal" />
         <p>{review.text}</p>
       </CardBody>
       <CardFooter>
