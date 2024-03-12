@@ -1,3 +1,4 @@
+import ImageGallery from "@/components/ImageGallery";
 import Mapbox from "@/components/Mapbox";
 import ReviewsSection from "@/components/ReviewsSection";
 import Avatar from "@/components/ui/Avatar";
@@ -67,6 +68,7 @@ export default async function Tour({ params }: { params: { id: string } }) {
           </div>
           <Mapbox tour={tour} />
           <ReviewsSection tourId={tour._id} />
+          <ImageGallery tour={tour} />
         </div>
       </>
     );
