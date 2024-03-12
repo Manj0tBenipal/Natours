@@ -1,3 +1,4 @@
+import Mapbox from "@/components/Mapbox";
 import ReviewsSection from "@/components/ReviewsSection";
 import Avatar from "@/components/ui/Avatar";
 import { user } from "@nextui-org/theme";
@@ -63,8 +64,9 @@ export default async function Tour({ params }: { params: { id: string } }) {
                   <Avatar key={user.name} user={guide} />
                 ))}
             </div>
-            <ReviewsSection tourId={tour._id} />
           </div>
+          <ReviewsSection tourId={tour._id} />
+          <Mapbox tour={tour} />
         </div>
       </>
     );
