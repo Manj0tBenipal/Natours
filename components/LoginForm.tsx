@@ -1,6 +1,6 @@
 "use client";
 import { login, signup } from "@/utils/serverActions";
-import isEmail from "validator/lib/isEmail";
+import isEmail from "validator/es/lib/isEmail";
 import { Button, Input } from "@nextui-org/react";
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
