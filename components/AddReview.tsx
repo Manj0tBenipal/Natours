@@ -10,7 +10,7 @@ import {
 } from "react";
 import { FaSpinner, FaStar } from "react-icons/fa";
 import { UserContext } from "./providers/UserContextProvider";
-import { postReview } from "@/utils/serverActions";
+import { postReview } from "@/utils/server_actions/reviews";
 import { useRouter } from "next/navigation";
 
 export default function AddReview({

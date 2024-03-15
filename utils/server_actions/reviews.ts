@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { addSessionCookieToHeader } from "./functions";
+import { addSessionCookieToHeader } from "../functions";
 
 /**
  * This function is used to post a review to the database
@@ -54,4 +54,3 @@ export async function deleteReview(reviewId: string): Promise<ServerActionRes> {
     return { error: err.message, data: null, status: "fail" };
   }
 }
-

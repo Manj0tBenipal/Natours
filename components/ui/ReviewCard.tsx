@@ -1,5 +1,5 @@
 "use client";
-import { deleteReview } from "@/utils/serverActions";
+import { deleteReview } from "@/utils/server_actions/reviews";
 import { Avatar, Card, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import { Dispatch, SetStateAction } from "react";
 import { FaStar } from "react-icons/fa";
