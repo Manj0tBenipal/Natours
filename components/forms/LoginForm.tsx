@@ -6,7 +6,7 @@ import React, { ChangeEvent, SetStateAction, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
 import { MdCancel, MdEmail } from "react-icons/md";
 import { useContext } from "react";
-import { UserContext } from "./providers/UserContextProvider";
+import { UserContext } from "../providers/UserContextProvider";
 interface userData {
   email: string;
   password: string;

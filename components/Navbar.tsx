@@ -7,7 +7,7 @@ import {
   NavbarItem,
   Button,
 } from "@nextui-org/react";
-import LoginForm from "./LoginForm";
+import LoginForm from "./forms/LoginForm";
 import { useContext, useState } from "react";
 import { UserContext } from "./providers/UserContextProvider";
 import UserAvatar from "./ui/UserAvatar";
