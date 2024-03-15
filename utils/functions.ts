@@ -16,3 +16,10 @@ export function addSessionCookieToHeader(
 
   headers.set("Authorization", `Bearer ${sessionCookie.value}`);
 }
+
+/**
+ * Eliminates the nedd of writing process.env.* when using environment variables
+ */
+export function env(variableName: string) {
+  return process.env[variableName];
+}
