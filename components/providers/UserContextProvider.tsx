@@ -1,4 +1,4 @@
-import { authUsingCookie } from "@/utils/serverActions";
+import { authUsingCookie } from "@/utils/server_actions/auth";
 import { createContext, useState, SetStateAction, useEffect } from "react";
 
 interface ContextType {
