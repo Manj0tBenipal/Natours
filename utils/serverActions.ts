@@ -158,25 +158,3 @@ export async function deleteReview(reviewId: string): Promise<ServerActionRes> {
   }
 }
 
-export async function getUsers(conditions: string): Promise<ServerActionRes> {
-  try {
-    const { page, limit } = JSON.parse(conditions);
-
-    const headers = new Headers();
-    addSessionCookieToHeader(cookies(), headers);
-
-    const promise = await fetch(
-      `${process.env.API_URL}/users?limit=${limit}&page=${page}&fields=role,active,name,email,_id,photo`,
-      {
-        headers: headers,
-      }
-    );
-    const res = await promise.json();
-
-    if (res.status === "fail" || res.status === "error")
-      throw new Error(res.err);
-    return { status: "success", error: null, data: res };
-  } catch (err: any) {
-    return { status: "fail", data: null, error: err.message };
-  }
-}

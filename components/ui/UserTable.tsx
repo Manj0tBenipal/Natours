@@ -1,5 +1,5 @@
 "use client";
-import { getUsers } from "@/utils/serverActions";
+import { getUsers } from "@/utils/server_actions/users";
 import {
   Table,
   TableHeader,
