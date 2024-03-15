@@ -9,6 +9,7 @@ interface User {
   email: string;
   photo: string;
   role: string;
+  active: boolean;
 }
 interface NewUser {
   name: string;
