@@ -1,5 +1,5 @@
 "use client";
-import { login, signup } from "@/utils/serverActions";
+import { login, signup } from "@/utils/server_actions/auth";
 import isEmail from "validator/es/lib/isEmail";
 import { Button, Input } from "@nextui-org/react";
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from "react";

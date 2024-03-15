@@ -2,7 +2,7 @@
 import { useContext, useState } from "react";
 import { UserContext } from "@/components/providers/UserContextProvider";
 import { Listbox, ListboxItem, User } from "@nextui-org/react";
-import { logout } from "@/utils/serverActions";
+import { logout } from "@/utils/server_actions/auth";
 
 import { useRouter } from "next/navigation";
 export default function UserAvatar() {
