@@ -29,7 +29,7 @@ export default function UserAvatar() {
         name={user.name}
         description={user.email}
         avatarProps={{
-          src: user.photo,
+          src: `/users/${user.photo}`,
           className: "w-10 h-10",
         }}
         onClick={() => {
