@@ -58,3 +58,26 @@ export async function getUsers(conditions: string): Promise<ServerActionRes> {
     return { status: "fail", data: null, error: err.message };
   }
 }
+
+/**
+ * Deletes a user from the database.
+ * @param {string} userId - The ID of the user to be deleted.
+ * @returns {Promise<ServerActionRes>} A promise that resolves with the server response.
+ *
+ */
+export async function deleteUser(userId: string): Promise<ServerActionRes> {
+  try {
+    const headers = new Headers();
+    addSessionCookieToHeader(cookies(), headers);
+    const promise = await fetch(`${env("API_URL")}/users/${userId}`, {
+      method: "DELETE",
+      headers,
+    });
+    const res = await promise.json();
+    if (res.status === "error" || res.status === "fail")
+      throw new Error(res.err);
+    return { data: res.data, status: "success", error: null };
+  } catch (err: any) {
+    return { error: err.message, data: null, status: "fail" };
+  }
+}
