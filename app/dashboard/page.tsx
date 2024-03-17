@@ -14,6 +14,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalContent,
+  Input,
 } from "@nextui-org/react";
 import UserTable from "@/components/ui/UserTable";
 import TourTable from "@/components/ui/TourTable";
@@ -105,10 +106,15 @@ export default function Dasboard() {
 
   return (
     <div className="flex flex-col gap-y-4">
-      <div className="flex items-start">
+      <div className="flex items-start  gap-x-3">
         <Dropdown>
           <DropdownTrigger>
-            <Button variant="solid" color="primary" className="font-bold">
+            <Button
+              variant="flat"
+              color="primary"
+              className="font-bold"
+              size="lg"
+            >
               {selectedCollection.toUpperCase()}
             </Button>
           </DropdownTrigger>
@@ -121,6 +127,17 @@ export default function Dasboard() {
             <DropdownItem key="bookings">Bookings</DropdownItem>
           </DropdownMenu>
         </Dropdown>
+        <Input
+          size="sm"
+          type="number"
+          value={limit.toString()}
+          onChange={(e) =>
+            setLimit(parseInt(e.target.value === "" ? "7" : e.target.value, 10))
+          }
+          variant="bordered"
+          label="Items Per Page"
+          className="max-w-[150px]"
+        />
       </div>
       {selectedCollection === "users" ? (
         <UserTable deleteDoc={openModal} limit={limit} reload={reload} />
