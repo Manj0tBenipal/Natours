@@ -1,7 +1,7 @@
 "use client";
 
-import { UserContext } from "@/components/providers/UserContextProvider";
-import { useCallback, useContext, useEffect, useState } from "react";
+
+import { useCallback, useEffect, useState } from "react";
 import {
   Dropdown,
   DropdownTrigger,
@@ -22,8 +22,6 @@ import { deleteDoc } from "@/utils/server_actions/documentOperations";
 import { IoMdWarning } from "react-icons/io";
 
 export default function Dasboard() {
-  //currently logged in user
-  const { user } = useContext(UserContext);
 
   //state variables
   const [limit, setLimit] = useState(7);
@@ -96,14 +94,7 @@ export default function Dasboard() {
     },
     [onOpen]
   );
-  //if user is not logged in, restrict the access
-  if (Object.keys(user).length === 0)
-    return <h1>Please log in to access this route.</h1>;
-
-  //if user is not admin restrict the access
-  if (user?.role !== "admin")
-    return <h1>Your are not allowed to access this route.</h1>;
-
+ 
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex items-start  gap-x-3">
