@@ -1,5 +1,5 @@
 "use client";
-import { deleteUser, getUsers } from "@/utils/server_actions/users";
+import { deleteUser, getDocs } from "@/utils/server_actions/documentOperations";
 import {
   Table,
   TableHeader,
@@ -41,7 +41,8 @@ export default function UserTable() {
   useEffect(() => {
     async function fetchUsers() {
       setIsLoading("loading");
-      const res = await getUsers(JSON.stringify({ limit: limit, page: page }));
+      const fields = ["role", "active", "name", "email", "_id", "photo"];
+      const res = await getDocs("users", { page, limit }, fields);
       if (res.status === "fail") {
         console.log(res.error);
         return alert(res.error);
