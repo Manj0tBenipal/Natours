@@ -1,12 +1,6 @@
 "use client";
 import { getDocs } from "@/utils/server_actions/documentOperations";
 import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
   Pagination,
   Spinner,
   Table,
@@ -15,26 +9,26 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  useDisclosure,
   Tooltip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import {  useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BiPencil, BiTrash } from "react-icons/bi";
-import { IoMdWarning } from "react-icons/io";
-export default function TourTable() {
+export default function TourTable({
+  deleteDoc,
+  limit,
+  reload,
+}: {
+  limit: number;
+  deleteDoc: (details: DocDetails) => void;
+  reload: boolean;
+}) {
   const router = useRouter();
-  const [reloadTours, setReloadTours] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [tableItems, setTableItems] = useState<TourDetailed[]>([]);
-  const [limit, setLimit] = useState(10);
   const [isLoading, setIsLoading] = useState<"loading" | "idle">("idle");
-  const [selectedTour, setSelectedTour] = useState<TourDetailed>();
-  const [isDeleting, setIsDeleting] = useState(false);
 
-  //next-ui custom hook to  control the behavior of modal(confirmation dialogue before delete)
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   useEffect(() => {
     const fetchTours = async () => {
       setIsLoading("loading");
@@ -47,47 +41,52 @@ export default function TourTable() {
       setIsLoading("idle");
     };
     fetchTours();
-  }, [page, reloadTours, limit]);
+  }, [limit, page, reload]);
 
-  
-  const renderCell = useCallback((tour: TourDetailed, columnKey: string) => {
-    switch (columnKey) {
-      case "name":
-        return <p>{tour.name}</p>;
-      case "price":
-        return <p>{tour.price}</p>;
-      case "difficulty":
-        return <p>{tour.difficulty}</p>;
-      case "rating":
-        return <p>{tour.ratingsAverage}</p>;
-      case "guides":
-        return <p>{tour.guides.length}</p>;
-      case "actions":
-        return (
-          <div className="relative flex items-center gap-3">
-            <Tooltip content="Edit user">
-              <span
-                className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                onClick={() => router.push(`/tours/edit/${tour._id}`)}
-              >
-                <BiPencil />
-              </span>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete tour">
-              <span
-                className="text-lg text-danger cursor-pointer active:opacity-50"
-                onClick={() => {
-                  setSelectedTour(tour);
-                  onOpen();
-                }}
-              >
-                <BiTrash />
-              </span>
-            </Tooltip>
-          </div>
-        );
-    }
-  }, []);
+  const renderCell = useCallback(
+    (tour: TourDetailed, columnKey: string) => {
+      switch (columnKey) {
+        case "name":
+          return <p>{tour.name}</p>;
+        case "price":
+          return <p>{tour.price}</p>;
+        case "difficulty":
+          return <p>{tour.difficulty}</p>;
+        case "rating":
+          return <p>{tour.ratingsAverage}</p>;
+        case "guides":
+          return <p>{tour.guides.length}</p>;
+        case "actions":
+          return (
+            <div className="relative flex items-center gap-3">
+              <Tooltip content="Edit user">
+                <span
+                  className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                  onClick={() => router.push(`/tours/edit/${tour._id}`)}
+                >
+                  <BiPencil />
+                </span>
+              </Tooltip>
+              <Tooltip color="danger" content="Delete tour">
+                <span
+                  className="text-lg text-danger cursor-pointer active:opacity-50"
+                  onClick={() => {
+                    deleteDoc({
+                      _id: tour._id,
+                      type: "tours",
+                      name: tour.name,
+                    });
+                  }}
+                >
+                  <BiTrash />
+                </span>
+              </Tooltip>
+            </div>
+          );
+      }
+    },
+    [deleteDoc, router]
+  );
   return (
     <>
       <Table
@@ -130,37 +129,6 @@ export default function TourTable() {
           )}
         </TableBody>
       </Table>
-      <Modal className="z-50" isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1 text-red-500">
-                <div className="flex items-center justify-center">
-                  <IoMdWarning /> Warning
-                </div>
-              </ModalHeader>
-              <ModalBody>
-                You are about to delete the tour named <b>{selectedTour?.name}</b>{" "}
-                This action cannot be reversed.
-              </ModalBody>
-              <ModalFooter>
-                <Button color="primary" variant="ghost" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  color="danger"
-                  isLoading={isDeleting}
-                  onPress={() => {
-                    // handleDelete(onClose);
-                  }}
-                >
-                  Delete
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
     </>
   );
 }

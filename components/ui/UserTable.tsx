@@ -1,5 +1,5 @@
 "use client";
-import { deleteUser, getDocs } from "@/utils/server_actions/documentOperations";
+import { getDocs } from "@/utils/server_actions/documentOperations";
 import {
   Table,
   TableHeader,
@@ -12,32 +12,26 @@ import {
   Chip,
   User,
   Tooltip,
-  Modal,
-  useDisclosure,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  ModalContent,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { BiPencil, BiTrash } from "react-icons/bi";
-import { IoMdWarning } from "react-icons/io";
 
-export default function UserTable() {
+export default function UserTable({
+  deleteDoc,
+  limit,
+  reload,
+}: {
+  limit: number;
+  deleteDoc: (details: DocDetails) => void;
+  reload: boolean;
+}) {
   const router = useRouter();
-
-  const [reloadUsers, setReloadUsers] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [tableItems, setTableItems] = useState<User[]>([]);
-  const [limit, setLimit] = useState(10);
   const [isLoading, setIsLoading] = useState<"loading" | "idle">("idle");
-  const [selectedUser, setSelectedUser] = useState<User>();
-  const [isDeleting, setIsDeleting] = useState(false);
-  //next-ui custom hook to  control the behavior of modal(confirmation dialogue before delete)
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   useEffect(() => {
     async function fetchUsers() {
       setIsLoading("loading");
@@ -52,7 +46,8 @@ export default function UserTable() {
       setIsLoading("idle");
     }
     fetchUsers();
-  }, [page, limit, reloadUsers]);
+  }, [limit, page, reload]);
+
   const renderCell = useCallback(
     (user: User, columnKey: string) => {
       switch (columnKey) {
@@ -97,8 +92,12 @@ export default function UserTable() {
                 <span
                   className="text-lg text-danger cursor-pointer active:opacity-50"
                   onClick={() => {
-                    setSelectedUser(user);
-                    onOpen();
+                    //true if doc is deleted
+                    deleteDoc({
+                      _id: user._id,
+                      type: "users",
+                      name: user.name,
+                    });
                   }}
                 >
                   <BiTrash />
@@ -108,32 +107,9 @@ export default function UserTable() {
           );
       }
     },
-    [router, onOpen]
+    [router, deleteDoc]
   );
-  const handleDelete = useCallback(
-    async (onClose: Function) => {
-      try {
-        setIsDeleting(true);
-        if (!selectedUser?._id)
-          throw new Error("Delete action invoked without selecting a user");
-        const res = await deleteUser(selectedUser._id);
-        if (res.status === "fail")
-          throw new Error(
-            res?.error || "Something went wrong Please try again."
-          );
-        alert(`Deleted ${selectedUser.name}`);
 
-        setReloadUsers((prev) => !prev);
-      } catch (err: any) {
-        alert(err.message);
-      } finally {
-        setSelectedUser({} as User);
-        setIsDeleting(false);
-        onClose();
-      }
-    },
-    [selectedUser]
-  );
   return (
     <>
       <Table
@@ -174,40 +150,6 @@ export default function UserTable() {
           )}
         </TableBody>
       </Table>
-      <Modal className="z-50" isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1 text-red-500">
-                <div className="flex items-center justify-center">
-                  <IoMdWarning /> Warning
-                </div>
-              </ModalHeader>
-              <ModalBody>
-                You are about to delete the user{" "}
-                <b>
-                  {selectedUser?.name}({selectedUser?.email})
-                </b>{" "}
-                This action cannot be reversed.
-              </ModalBody>
-              <ModalFooter>
-                <Button color="primary" variant="ghost" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  color="danger"
-                  isLoading={isDeleting}
-                  onPress={() => {
-                    handleDelete(onClose);
-                  }}
-                >
-                  Delete
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
     </>
   );
 }
