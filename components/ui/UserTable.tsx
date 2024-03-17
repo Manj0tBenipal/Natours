@@ -13,7 +13,7 @@ import {
   User,
   Tooltip,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { BiPencil, BiTrash } from "react-icons/bi";
 
@@ -27,6 +27,7 @@ export default function UserTable({
   reload: boolean;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [tableItems, setTableItems] = useState<User[]>([]);
@@ -83,7 +84,9 @@ export default function UserTable({
               <Tooltip content="Edit user">
                 <span
                   className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                  onClick={() => router.push(`/users/edit/${user._id}`)}
+                  onClick={() =>
+                    router.push(`${pathname}/users/edit/${user._id}`)
+                  }
                 >
                   <BiPencil />
                 </span>
@@ -92,7 +95,6 @@ export default function UserTable({
                 <span
                   className="text-lg text-danger cursor-pointer active:opacity-50"
                   onClick={() => {
-                    //true if doc is deleted
                     deleteDoc({
                       _id: user._id,
                       type: "users",
