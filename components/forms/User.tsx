@@ -10,7 +10,7 @@ import {
   Switch,
 } from "@nextui-org/react";
 import { redirect, useRouter } from "next/navigation";
-import { editUser } from "@/utils/server_actions/users";
+import { editUser } from "@/utils/server_actions/documentOperations";
 import { FaSpinner } from "react-icons/fa";
 const dynamic = "force-dynamic";
 export default function EditUser({ user }: { user: User }) {
