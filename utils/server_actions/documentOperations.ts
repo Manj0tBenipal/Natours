@@ -30,21 +30,25 @@ export async function editUser(user: User): Promise<ServerActionRes> {
 }
 
 /**
- * Retrieves a list of users from the server based on specified conditions.
- * @param {string} conditions - JSON string representing the conditions for fetching users.
- *                              It should contain 'page' and 'limit' properties.
- * @returns {Promise<ServerActionRes>} A promise that resolves with the server response.
- *                                     The response contains status information and user data.
+ * Fetches documents from a specified collection with optional filters and fields.
+ * @param {string} collection - The name of the collection from which to fetch documents.
+ * @param {Filters} filters - An object containing filters for the query, including 'limit' and 'page'.
+ * @param {string[]} [fields] - An optional array of field names to include in the response.
+ * @returns {Promise<ServerActionRes>} A Promise that resolves with the server response containing the fetched documents.
  */
-export async function getUsers(conditions: string): Promise<ServerActionRes> {
+export async function getDocs(
+  collection: string,
+  filters: Filters,
+  fields?: string[]
+): Promise<ServerActionRes> {
   try {
-    const { page, limit } = JSON.parse(conditions);
-
     const headers = new Headers();
     addSessionCookieToHeader(cookies(), headers);
 
+    //costruct a new queryString based on the filters and fields
+    const queryString = `?limit=${filters.limit}&page=${filters.page}${fields ? "&fields=" + fields.join(",") : ""}`;
     const promise = await fetch(
-      `${process.env.API_URL}/users?limit=${limit}&page=${page}&fields=role,active,name,email,_id,photo`,
+      `${process.env.API_URL}/${collection.toLowerCase()}${queryString}`,
       {
         headers: headers,
       }
