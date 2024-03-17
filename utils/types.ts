@@ -37,7 +37,7 @@ interface TourDetailed {
   };
   price: number;
   duration: 14;
-  difficulty: "easy" | "difficult" | "hard";
+  difficulty: Difficulty;
   ratingsQuantity: number;
   ratingsAverage: number;
   summary: string;
@@ -49,6 +49,7 @@ interface TourDetailed {
   guides: User[];
   reviews: Review[];
 }
+type Difficulty = "easy" | "medium" | "difficult";
 interface Location {
   type: string;
   coordinates: number[];
@@ -78,3 +79,12 @@ interface DocDetails {
 }
 
 type collection = "tours" | "users";
+
+interface PlacesAPILocation {
+  description: string;
+  place_id: string;
+  structured_formatting: {
+    main_text: string;
+    secindary_text: string;
+  };
+}
