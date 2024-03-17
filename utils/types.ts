@@ -65,3 +65,8 @@ interface Review {
   rating: number;
   createdAt: Date;
 }
+
+interface Filters {
+  page: number;
+  limit: number;
+}
