@@ -65,7 +65,10 @@ export default function LoginForm({
   const handleLogin = async () => {
     setButtonLoading(true);
     try {
-      const loginData = await login(JSON.stringify(userData));
+      const loginData = await login({
+        email: userData.email,
+        password: userData.password,
+      });
 
       //extract error and user data from response
       const { error, data } = loginData;

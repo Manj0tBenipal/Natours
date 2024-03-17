@@ -2,16 +2,24 @@
 
 import { cookies } from "next/headers";
 import { addSessionCookieToHeader } from "../functions";
+import { CgPassword } from "react-icons/cg";
 /**
- *
+ *This function accepts credentails of a user and tries to login the user.
+ *On succesfull login the JWT returned by the API is added to "session" cookie and is sent to the user
  * @param credentials email and password of user
  * @returns data
  */
-export async function login(credentials: string): Promise<ServerActionRes> {
+export async function login({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}): Promise<ServerActionRes> {
   try {
     const res = await fetch(`${process.env.API_URL}/users/login`, {
       method: "POST",
-      body: credentials,
+      body: JSON.stringify({ email, password }),
       headers: { "Content-type": "application/JSON" },
     });
     const statusCode = res.status;
