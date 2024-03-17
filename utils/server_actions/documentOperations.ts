@@ -37,7 +37,7 @@ export async function editUser(user: User): Promise<ServerActionRes> {
  * @returns {Promise<ServerActionRes>} A Promise that resolves with the server response containing the fetched documents.
  */
 export async function getDocs(
-  collection: string,
+  collection: "tours" | "users",
   filters: Filters,
   fields?: string[]
 ): Promise<ServerActionRes> {
@@ -69,11 +69,14 @@ export async function getDocs(
  * @returns {Promise<ServerActionRes>} A promise that resolves with the server response.
  *
  */
-export async function deleteUser(userId: string): Promise<ServerActionRes> {
+export async function deleteDoc(
+  collection: collection,
+  docId: string
+): Promise<ServerActionRes> {
   try {
     const headers = new Headers();
     addSessionCookieToHeader(cookies(), headers);
-    const promise = await fetch(`${env("API_URL")}/users/${userId}`, {
+    const promise = await fetch(`${env("API_URL")}/${collection}/${docId}`, {
       method: "DELETE",
       headers,
     });

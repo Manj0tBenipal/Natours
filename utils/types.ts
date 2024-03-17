@@ -70,3 +70,11 @@ interface Filters {
   page: number;
   limit: number;
 }
+
+interface DocDetails {
+  _id: string;
+  name: string;
+  type: collection;
+}
+
+type collection = "tours" | "users";
