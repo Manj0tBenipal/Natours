@@ -10,6 +10,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import UserTable from "@/components/ui/UserTable";
+import TourTable from "@/components/ui/TourTable";
 
 export default function Dasboard() {
   const { user } = useContext(UserContext);
@@ -37,7 +38,13 @@ export default function Dasboard() {
           </DropdownMenu>
         </Dropdown>
       </div>
-      <UserTable />
+      {selectedCollection === "users" ? (
+        <UserTable />
+      ) : selectedCollection === "tours" ? (
+        <TourTable />
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }
