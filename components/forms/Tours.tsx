@@ -1,10 +1,14 @@
 "use client";
 
-import { Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import AutoCompleteLocationInput from "../ui/AutoCompleteLocationInput";
+import { useRouter } from "next/navigation";
+import { editDoc } from "@/utils/server_actions/documentOperations";
 
 export default function Tours({ tourDetails }: { tourDetails: TourDetailed }) {
+  const router = useRouter();
+  const [isSaving, setIsSaving] = useState(false);
   const [tour, setTour] = useState(tourDetails);
 
   //available options for dificulty levels for locations
@@ -18,7 +22,19 @@ export default function Tours({ tourDetails }: { tourDetails: TourDetailed }) {
     },
     []
   );
-
+  const handleSave = useCallback(async () => {
+    try {
+      setIsSaving(true);
+      const res = await editDoc("tours", tour);
+      if (res.status === "fail")
+        throw new Error(res?.error || "failed to save data to database");
+      if (res.status === "success") alert("Saved Successfully");
+    } catch (err: any) {
+      alert(err?.message || "Failed to connect to server. Please try again");
+    } finally {
+      setIsSaving(false);
+    }
+  }, [tour]);
   return (
     <div className="flex flex-col gap-y-3 p-4 bg-white shadow-md rounded-2xl">
       <Input
@@ -89,7 +105,7 @@ export default function Tours({ tourDetails }: { tourDetails: TourDetailed }) {
           setter={(location: Location) => {
             setTour((prev) => ({
               ...prev,
-              ...location,
+              startLocation: location,
             }));
           }}
         />
@@ -111,6 +127,19 @@ export default function Tours({ tourDetails }: { tourDetails: TourDetailed }) {
             />
           ))}
         </div>
+      </div>
+      <div className="flex items-center gap-x-3">
+        <Button
+          variant="solid"
+          color="primary"
+          onClick={handleSave}
+          isLoading={isSaving}
+        >
+          Save
+        </Button>
+        <Button variant="solid" color="danger" onClick={() => router.back()}>
+          Discard
+        </Button>
       </div>
     </div>
   );
