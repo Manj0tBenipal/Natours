@@ -9,16 +9,24 @@ import { addSessionCookieToHeader, env } from "../functions";
  * @param user
  * @returns {ServerActionRes}
  */
-export async function editUser(user: User): Promise<ServerActionRes> {
+export async function editDoc(
+  collection: collection,
+  object: User | TourDetailed
+): Promise<ServerActionRes> {
   try {
     const headers = new Headers({ "Content-type": "application/JSON" });
     //add session cookie to headers for the API to verify user's priveleges
     addSessionCookieToHeader(cookies(), headers);
-    const promise = await fetch(`${env("API_URL")}/users/${user._id}`, {
-      method: "PATCH",
-      headers,
-      body: JSON.stringify(user),
-    });
+    if (!object?._id)
+      throw new Error("Cannot determine which document to upload!");
+    const promise = await fetch(
+      `${env("API_URL")}/${collection}/${object._id}`,
+      {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify(object),
+      }
+    );
 
     const res = await promise.json();
     if (res.status === "error" || res.status === "fail")
@@ -37,7 +45,7 @@ export async function editUser(user: User): Promise<ServerActionRes> {
  * @returns {Promise<ServerActionRes>} A Promise that resolves with the server response containing the fetched documents.
  */
 export async function getDocs(
-  collection: "tours" | "users",
+  collection: collection,
   filters: Filters,
   fields?: string[]
 ): Promise<ServerActionRes> {

@@ -10,7 +10,7 @@ import {
   Switch,
 } from "@nextui-org/react";
 import { redirect, useRouter } from "next/navigation";
-import { editUser } from "@/utils/server_actions/documentOperations";
+import { editDoc } from "@/utils/server_actions/documentOperations";
 import { FaSpinner } from "react-icons/fa";
 const dynamic = "force-dynamic";
 export default function EditUser({ user }: { user: User }) {
@@ -29,7 +29,7 @@ export default function EditUser({ user }: { user: User }) {
   const handleSave = useCallback(async (user: User) => {
     try {
       setIsSaving(true);
-      const res = await editUser(user);
+      const res = await editDoc("users", user);
       if (res.status === "fail") throw new Error(res?.error || "");
       alert("Data saved Successfully");
       router.back();
