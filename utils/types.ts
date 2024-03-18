@@ -54,6 +54,7 @@ interface Location {
   type: string;
   coordinates: number[];
   description: string;
+  address: string;
   day: number;
   _id: string;
 }
