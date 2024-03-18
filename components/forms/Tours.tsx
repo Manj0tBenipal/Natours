@@ -49,7 +49,7 @@ export default function Tours({ tourDetails }: { tourDetails: TourDetailed }) {
           value={tour.price.toString()}
           onChange={handleInput}
           name="price"
-          label="Tour name"
+          label="Tour Price"
           type="number"
         />
 
