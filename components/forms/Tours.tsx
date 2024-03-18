@@ -79,12 +79,44 @@ export default function Tours({ tourDetails }: { tourDetails: TourDetailed }) {
         placeholder="Enter your Summary"
         onChange={handleInput}
       />
-      <AutoCompleteLocationInput
-        defaultInput={tour.startLocation.address}
-        setter={(location: Location, address?: string) => {
-          setTour((prev) => ({ ...prev, ...location, address: address || "" }));
-        }}
-      />
+
+      <div className="flex flex-col gap-y-2 p-4 shadow-md rounded-2xl">
+        <h1 className="text-2xl ">Start Location</h1>
+
+        <AutoCompleteLocationInput
+          defaultInput={tour.startLocation.address}
+          description={tour.startLocation.description}
+          setter={(
+            location: Location,
+            description: string,
+            address?: string
+          ) => {
+            setTour((prev) => ({
+              ...prev,
+              ...location,
+              description,
+              address: address || "",
+            }));
+          }}
+        />
+      </div>
+      <div className="flex flex-col gap-y-2 p-4 shadow-md rounded-2xl">
+        <h1 className="text-2xl ">Locations</h1>
+        <div className="md:grid md:grid-cols-2 md:gap-3 grid-auto-rows">
+          {tour.locations.map((location: Location, index: number) => (
+            <AutoCompleteLocationInput
+              key={location.day}
+              defaultInput={location.address}
+              description={location.description}
+              setter={(location: Location) => {
+                const newLocations = [...tour.locations];
+                newLocations[index] = location;
+                setTour((prev) => ({ ...prev }));
+              }}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
