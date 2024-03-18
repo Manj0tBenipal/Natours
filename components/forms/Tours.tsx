@@ -79,39 +79,34 @@ export default function Tours({ tourDetails }: { tourDetails: TourDetailed }) {
         placeholder="Enter your Summary"
         onChange={handleInput}
       />
-
+      {/* Start Location of a tour. Setter function needs to be provided separately as start location and locations(spots where tour will be conducted
+  are stored in different keys in the tour Object. The setter function accepts  location object and changes the state of parent accordingly) */}
       <div className="flex flex-col gap-y-2 p-4 shadow-md rounded-2xl">
         <h1 className="text-2xl ">Start Location</h1>
 
         <AutoCompleteLocationInput
-          defaultInput={tour.startLocation.address}
-          description={tour.startLocation.description}
-          setter={(
-            location: Location,
-            description: string,
-            address?: string
-          ) => {
+          location={tour.startLocation}
+          setter={(location: Location) => {
             setTour((prev) => ({
               ...prev,
               ...location,
-              description,
-              address: address || "",
             }));
           }}
         />
       </div>
+      {/* locations are an array of Location objects each of which is passed a setter function which changes respective objects when a 
+      change is made to one or more locations */}
       <div className="flex flex-col gap-y-2 p-4 shadow-md rounded-2xl">
         <h1 className="text-2xl ">Locations</h1>
         <div className="md:grid md:grid-cols-2 md:gap-3 grid-auto-rows">
           {tour.locations.map((location: Location, index: number) => (
             <AutoCompleteLocationInput
-              key={location.day}
-              defaultInput={location.address}
-              description={location.description}
+              key={location.day + location.address}
+              location={location}
               setter={(location: Location) => {
                 const newLocations = [...tour.locations];
                 newLocations[index] = location;
-                setTour((prev) => ({ ...prev }));
+                setTour((prev) => ({ ...prev, locations: newLocations }));
               }}
             />
           ))}
