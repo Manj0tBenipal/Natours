@@ -1,6 +1,6 @@
 "use client";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getLocations } from "@/utils/server_actions/maps";
 /**
  * This component is an input auto-complete tag that finds a location based on user's input
@@ -42,6 +42,17 @@ export default function AutoCompleteLocationInput({
     }
   }, []);
 
+  //memoized options for locations
+  const locationOptions = useMemo(() => {
+    const locationOptionElements = locations.map((item) => (
+      <AutocompleteItem key={item.description}>
+        {item.description}
+      </AutocompleteItem>
+    ));
+
+    return locationOptionElements;
+  }, [locations]);
+
   /**
    * createss a debouncing effect when user enter something in the location input
    * makes a request only after a certain amount of time has passed after the last change to
@@ -58,20 +69,14 @@ export default function AutoCompleteLocationInput({
 
   return (
     <Autocomplete
-      inputValue={currentSearchString}
+      defaultInputValue={defaultInput}
       onInputChange={setCurrentSearchString}
       label="Start Location"
-      placeholder="Search an animal"
+      placeholder="34 West Ave."
       isLoading={loadingLocations}
       onSelectionChange={(key) => setSelectedAddress(key as string)}
     >
-      {[locations].flat().map((item) => {
-        return (
-          <AutocompleteItem key={item.description} className="capitalize">
-            {item.description}
-          </AutocompleteItem>
-        );
-      })}
+      {locationOptions}
     </Autocomplete>
   );
 }
