@@ -49,13 +49,23 @@ export default function AutoCompleteLocationInput({
     }
   }, []);
 
+  /**
+   * This function is  responsible for setting up the state of newLocation
+   * with the updated selectedAddress and find co-ordinates of this address.
+   * The address and co-ordinates are updated in the state in one transaction to avoid
+   * unecessary state sync between parent and child
+   */
   const fetchLatLng = useCallback(async (address: string) => {
     try {
       const res = await getLatLngFromAddress(address);
       if (res.status === "fail")
         throw new Error(res.error || "Failed to connect to server");
       const { lat, lng } = res.data;
-      setNewLocation((prev) => ({ ...prev, coordinates: [lng, lat] }));
+      setNewLocation((prev) => ({
+        ...prev,
+        coordinates: [lng, lat],
+        address,
+      }));
     } catch (err: any) {
       alert(err.message);
     }
@@ -85,15 +95,22 @@ export default function AutoCompleteLocationInput({
     };
   }, [currentSearchString, fetchLocations]);
 
+  /**
+   *This use Effect is triggered when user finalizes an address.
+   fetchLnglat function saves the address and its co-ordinates to newLocation
+   */
   useEffect(() => {
     if (!selectedAddress) return;
-    setNewLocation((prev): Location => ({ ...prev, address: selectedAddress }));
     fetchLatLng(selectedAddress);
   }, [selectedAddress, fetchLatLng]);
 
+  /**
+   * after fetchLnglat has updated newLocation with updated address and co-ordinates
+   * this use effect triggers a state-sync between parent and child after comparing
+   * states newLocation(localState) and state passed by parent. This helps prevent re-rendering loops
+   */
   useEffect(() => {
     if (newLocation !== location) {
-      console.log("Compared and saved");
       setter(newLocation);
     }
   }, [newLocation, setter, location]);
@@ -115,7 +132,7 @@ export default function AutoCompleteLocationInput({
       </Autocomplete>
       <Input
         value={newLocation.description}
-        name="description"
+        name="location description"
         label="Location Description"
         type="text"
         onChange={(e) =>
