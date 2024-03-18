@@ -29,12 +29,7 @@ interface TourShort {
 interface TourDetailed {
   _id: string;
   name: string;
-  startLocation: {
-    type: string;
-    coordinates: number[];
-    address: string;
-    description: string;
-  };
+  startLocation: Location;
   price: number;
   duration: 14;
   difficulty: Difficulty;
@@ -55,8 +50,7 @@ interface Location {
   coordinates: number[];
   description: string;
   address: string;
-  day: number;
-  _id: string;
+  day?: number;
 }
 
 interface Review {
@@ -86,6 +80,6 @@ interface PlacesAPILocation {
   place_id: string;
   structured_formatting: {
     main_text: string;
-    secindary_text: string;
+    secondary_text: string;
   };
 }
