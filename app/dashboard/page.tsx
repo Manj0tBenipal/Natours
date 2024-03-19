@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useCallback, useEffect, useState } from "react";
 import {
   Dropdown,
@@ -16,13 +15,12 @@ import {
   ModalContent,
   Input,
 } from "@nextui-org/react";
-import UserTable from "@/components/ui/UserTable";
-import TourTable from "@/components/ui/TourTable";
+import UserTable from "@/components/tables/UserTable";
+import TourTable from "@/components/tables/TourTable";
 import { deleteDoc } from "@/utils/server_actions/documentOperations";
 import { IoMdWarning } from "react-icons/io";
 
 export default function Dasboard() {
-
   //state variables
   const [limit, setLimit] = useState(7);
   const [selectedCollection, setSelectedCollection] = useState("users");
@@ -94,7 +92,7 @@ export default function Dasboard() {
     },
     [onOpen]
   );
- 
+
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex items-start  gap-x-3">
