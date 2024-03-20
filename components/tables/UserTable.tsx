@@ -61,7 +61,7 @@ export default function UserTable({
             <User
               avatarProps={{
                 radius: "lg",
-                src: `/users/${user.photo}`,
+                src: `${user.photo}`,
               }}
               description={user.email}
               name={user[columnKey]}
@@ -113,7 +113,7 @@ export default function UserTable({
           );
       }
     },
-    [router, deleteDoc]
+    [router, deleteDoc, pathname]
   );
 
   return (

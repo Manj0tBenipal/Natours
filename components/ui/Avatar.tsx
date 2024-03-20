@@ -6,7 +6,7 @@ export default function Avatar({ user }: { user: User }) {
       name={user.name}
       description={user.email}
       avatarProps={{
-        src: `/users/${user.photo}`,
+        src: `${user.photo}`,
         className: "w-10 h-10",
       }}
     ></User>
