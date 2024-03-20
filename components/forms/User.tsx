@@ -9,9 +9,10 @@ import {
   SelectItem,
   Switch,
 } from "@nextui-org/react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { editDoc } from "@/utils/server_actions/documentOperations";
 import { FaSpinner } from "react-icons/fa";
+import Dropone from "../Dropone";
 const dynamic = "force-dynamic";
 export default function EditUser({ user }: { user: User }) {
   const router = useRouter();
@@ -26,19 +27,24 @@ export default function EditUser({ user }: { user: User }) {
   );
   const roles = ["customer", "admin", "lead-guide", "guide"];
 
-  const handleSave = useCallback(async (user: User) => {
-    try {
-      setIsSaving(true);
-      const res = await editDoc("users", user);
-      if (res.status === "fail") throw new Error(res?.error || "");
-      alert("Data saved Successfully");
-      router.back();
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setIsSaving(false);
-    }
-  }, []);
+  const handleSave = useCallback(
+    async (user: User) => {
+      try {
+        setIsSaving(true);
+        const res = await editDoc("users", user);
+        if (res.status === "fail") throw new Error(res?.error || "");
+        alert("Data saved Successfully");
+        router.back();
+      } catch (err: any) {
+        alert(err.message);
+      } finally {
+        setIsSaving(false);
+      }
+    },
+    [router]
+  );
+
+  console.log(userData);
   return (
     <div
       className="flex flex-col gap-y-3 p-4 bg-white shadow-md rounded-2xl
@@ -70,6 +76,11 @@ export default function EditUser({ user }: { user: User }) {
           </SelectItem>
         ))}
       </Select>
+      <Dropone
+        setUrl={(url: string) => {
+          setUserData((prev) => ({ ...prev, photo: url }));
+        }}
+      />
       <div className="flex gap-x-3 w-full items-center ">
         <Chip
           className="text-white"
@@ -84,6 +95,7 @@ export default function EditUser({ user }: { user: User }) {
           }
         />
       </div>
+
       <div className="flex gap-x-3 items-center w-full ">
         <Button
           isLoading={isSaving}
