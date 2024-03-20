@@ -23,3 +23,8 @@ export function addSessionCookieToHeader(
 export function env(variableName: string) {
   return process.env[variableName];
 }
+
+export function createRandomString() {
+  let uuid = self.crypto.randomUUID();
+  return uuid;
+}
