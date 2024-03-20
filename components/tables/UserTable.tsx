@@ -32,22 +32,26 @@ export default function UserTable({
   const [totalPages, setTotalPages] = useState(0);
   const [tableItems, setTableItems] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState<"loading" | "idle">("idle");
-
-  useEffect(() => {
-    async function fetchUsers() {
-      setIsLoading("loading");
-      const fields = ["role", "active", "name", "email", "_id", "photo"];
-      const res = await getDocs("users", { page, limit }, fields);
-      if (res.status === "fail") {
-        console.log(res.error);
-        return alert(res.error);
-      }
-      setTotalPages(res.data.totalPages);
-      setTableItems(res.data.data);
-      setIsLoading("idle");
+  const fetchUsers = useCallback(async () => {
+    setIsLoading("loading");
+    const fields = ["role", "active", "name", "email", "_id", "photo"];
+    const res = await getDocs("users", { page, limit }, fields);
+    if (res.status === "fail") {
+      console.log(res.error);
+      return alert(res.error);
     }
+    setTotalPages(res.data.totalPages);
+    setTableItems(res.data.data);
+    setIsLoading("idle");
+  }, [limit, page]);
+
+  /**
+   * Triggers fetching of users once page limit is changed or a
+   * manual reload is triggered
+   */
+  useEffect(() => {
     fetchUsers();
-  }, [limit, page, reload]);
+  }, [limit, page, reload, fetchUsers]);
 
   const renderCell = useCallback(
     (user: User, columnKey: string) => {
