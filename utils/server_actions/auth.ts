@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { addSessionCookieToHeader } from "../functions";
-import { CgPassword } from "react-icons/cg";
+
 /**
  *This function accepts credentails of a user and tries to login the user.
  *On succesfull login the JWT returned by the API is added to "session" cookie and is sent to the user
