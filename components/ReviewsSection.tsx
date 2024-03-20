@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Pagination, Button, Divider } from "@nextui-org/react";
 import ReviewCard from "./ui/ReviewCard";
 import SkeletonComponent from "./ui/Skeleton";
@@ -20,32 +20,35 @@ export default function ReviewsSection({ tourId }: { tourId: string }) {
   for (let i = 0; i < 4; i++) {
     skeletons.push(<SkeletonComponent key={i} />);
   }
-  async function fetchReviews() {
-    try {
-      setFetching(true);
-      const reviewsPromise = await fetch(
-        `/api/reviews/${tourId}${currentPage > 1 ? "?page=" + currentPage : ""}`
-      );
-      const reviewsRes = await reviewsPromise.json();
-      if (reviewsRes.status === "fail" || reviewsRes.err)
-        throw new Error(reviewsRes.err);
-      const reviews: Review[] = reviewsRes.data;
-      if (reviews?.length > 0) {
-        setTotalPages(reviewsRes.totalPages);
-        setReviews(reviews);
+  const fetchReviews = useCallback(
+    async function fetchReviews() {
+      try {
+        setFetching(true);
+        const reviewsPromise = await fetch(
+          `/api/reviews/${tourId}${currentPage > 1 ? "?page=" + currentPage : ""}`
+        );
+        const reviewsRes = await reviewsPromise.json();
+        if (reviewsRes.status === "fail" || reviewsRes.err)
+          throw new Error(reviewsRes.err);
+        const reviews: Review[] = reviewsRes.data;
+        if (reviews?.length > 0) {
+          setTotalPages(reviewsRes.totalPages);
+          setReviews(reviews);
+          setFetching(false);
+        }
+      } catch (err) {
+        console.log(err);
         setFetching(false);
       }
-    } catch (err) {
-      console.log(err);
-      setFetching(false);
-    }
-  }
+    },
+    [currentPage, tourId]
+  );
   function changeToLastPage() {
     setCurrentPage(totalPages);
   }
   useEffect(() => {
     fetchReviews();
-  }, [currentPage, reloadReviews]);
+  }, [currentPage, reloadReviews, fetchReviews]);
   return (
     <div className="flex flex-col gap-y-4  bg-slate-200 rounded-2xl p-4">
       <h1 className="text-3xl text-gradient font-bold">Reviews</h1>
@@ -54,7 +57,7 @@ export default function ReviewsSection({ tourId }: { tourId: string }) {
         reloadReviews={setRelaodReviews}
         changeToLastPage={changeToLastPage}
       />
-  
+
       {fetching ? (
         skeletons.map((s) => s)
       ) : (
