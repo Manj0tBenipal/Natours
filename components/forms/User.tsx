@@ -43,8 +43,6 @@ export default function EditUser({ user }: { user: User }) {
     },
     [router]
   );
-
-  console.log(userData);
   return (
     <div
       className="flex flex-col gap-y-3 p-4 bg-white shadow-md rounded-2xl
