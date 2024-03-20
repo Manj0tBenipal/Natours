@@ -5,6 +5,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import AutoCompleteLocationInput from "../ui/AutoCompleteLocationInput";
 import { useRouter } from "next/navigation";
 import { editDoc } from "@/utils/server_actions/documentOperations";
+import { revalidate } from "@/utils/server_actions/helper";
 
 export default function Tours({ tourDetails }: { tourDetails: TourDetailed }) {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function Tours({ tourDetails }: { tourDetails: TourDetailed }) {
       const res = await editDoc("tours", tour);
       if (res.status === "fail")
         throw new Error(res?.error || "failed to save data to database");
+      revalidate(`/tours/${tour._id}`);
       if (res.status === "success") alert("Saved Successfully");
     } catch (err: any) {
       alert(err?.message || "Failed to connect to server. Please try again");
