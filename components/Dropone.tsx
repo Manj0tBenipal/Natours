@@ -12,7 +12,7 @@ import { BiFolderOpen } from "react-icons/bi";
  * This component is a Drang 'n' Drop zone which uploads a selected image file
  * to s3 bucket. The URL is then passed to the setURL fuction which is recieved in props.
  */
-export default function Dropone({ setUrl }: { setUrl: (url: string) => void }) {
+export default function Dropone({ setUrl, }: { setUrl: (url: string) => void }) {
   const pathname = usePathname();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -66,8 +66,8 @@ export default function Dropone({ setUrl }: { setUrl: (url: string) => void }) {
           "Content-type": file.type,
         },
       });
-      console.log(process.env.NEXT_PUBLIC_AWS_BUCKET_PUBLIC_URL);
       setUrl(`${process.env.NEXT_PUBLIC_AWS_BUCKET_PUBLIC_URL}/${filename}`);
+      alert("Saved image successfully");
     } catch (err: any) {
       alert(err.message);
     } finally {
