@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { editDoc } from "@/utils/server_actions/documentOperations";
 import { FaSpinner } from "react-icons/fa";
 import Dropone from "../Dropone";
-const dynamic = "force-dynamic";
+
 export default function EditUser({ user }: { user: User }) {
   const router = useRouter();
   const [userData, setUserData] = useState(user);
