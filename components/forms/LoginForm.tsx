@@ -2,7 +2,13 @@
 import { login, signup } from "@/utils/server_actions/auth";
 import isEmail from "validator/es/lib/isEmail";
 import { Button, Input } from "@nextui-org/react";
-import React, { ChangeEvent, SetStateAction, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
 import { MdCancel, MdEmail } from "react-icons/md";
 import { useContext } from "react";
@@ -35,34 +41,37 @@ export default function LoginForm({
    * values to name and password from the inout elements
    * @param e
    */
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData((prev: userData) => ({ ...prev, [name]: value }) as userData);
-  };
+  }, []);
 
   //toggles the visiblity of password
   const toggleVisibility = () => setIsVisible((prev) => !prev);
-  const validateuserData = (userData: userData) => {
-    setValidated(() => {
-      let isValid =
-        userData.password.length >= 12 &&
-        userData.password.length <= 20 &&
-        isEmail(userData.email);
+  const validateuserData = useCallback(
+    (userData: userData) => {
+      setValidated(() => {
+        let isValid =
+          userData.password.length >= 12 &&
+          userData.password.length <= 20 &&
+          isEmail(userData.email);
 
-      if (type === "signup") {
-        isValid = isValid && userData.name ? true : false;
+        if (type === "signup") {
+          isValid = isValid && userData.name ? true : false;
 
-        isValid = isValid && userData.password === userData.passwordConfirm;
-      }
-      return isValid;
-    });
-  };
+          isValid = isValid && userData.password === userData.passwordConfirm;
+        }
+        return isValid;
+      });
+    },
+    [type]
+  );
   /*
    * Call the server action to login using the auth API
   clear the from
    *
    */
-  const handleLogin = async () => {
+  const handleLogin = useCallback(async () => {
     setButtonLoading(true);
     try {
       const loginData = await login({
@@ -88,7 +97,7 @@ export default function LoginForm({
       alert(err.message);
       setButtonLoading(false);
     }
-  };
+  }, [userData.email, userData.password, loginFormVisible, setUser]);
 
   const handleSignup = async () => {
     setButtonLoading(true);
@@ -116,7 +125,7 @@ export default function LoginForm({
   //validate userData on every change in email or password
   useEffect(() => {
     validateuserData(userData);
-  }, [userData]);
+  }, [userData, validateuserData]);
 
   return (
     <div className="sticky top-0 w-full h-svh z-50 bg-white flex items-center justify-center">
@@ -151,6 +160,9 @@ export default function LoginForm({
             <MdEmail className="text-xl text-default-400 pointer-events-none flex-shrink-0" />
           }
         />
+        {type === "login" && (
+          <p className="text-gray-400">admin: admin@natours.io</p>
+        )}
         <Input
           label="Password"
           name="password"
@@ -173,6 +185,9 @@ export default function LoginForm({
           type={isVisible ? "text" : "password"}
           className="max-w-xs"
         />
+        {type === "login" && (
+          <p className="text-gray-400">hint: manjotbenipal</p>
+        )}
         {type === "signup" && (
           <Input
             label="Confirm Password"
