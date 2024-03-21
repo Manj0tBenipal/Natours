@@ -6,6 +6,7 @@ import {
   NavbarContent,
   NavbarItem,
   Button,
+  NavbarBrand,
 } from "@nextui-org/react";
 import LoginForm from "./forms/LoginForm";
 import { useContext, useState } from "react";
@@ -22,6 +23,13 @@ export default function NavbarComponent() {
       )}
 
       <Navbar className="flex min-w-full z-40 shadow-sm">
+        <NavbarBrand
+          as={Link}
+          href="/"
+          className="text-3xl font-extrabold text-[var(--color-primary)]"
+        >
+          Natours
+        </NavbarBrand>
         <NavbarContent justify="start">
           <NavbarItem>
             <Link href="/tours">Tours</Link>
